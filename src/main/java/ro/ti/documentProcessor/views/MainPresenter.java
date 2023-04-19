@@ -30,7 +30,7 @@ public class MainPresenter {
     
     @FXML
     void buttonClick() {
-        label.setText("Hello JavaFX Universe!");
+        label.setText("Hello!");
     }
     
 }
