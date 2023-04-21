@@ -1,5 +1,6 @@
 package ro.ti.documentProcessor;
 
+import com.gluonhq.charm.glisten.visual.Theme;
 import ro.ti.documentProcessor.views.MainView;
 import ro.ti.documentProcessor.views.SettingsView;
 import com.gluonhq.charm.glisten.application.AppManager;
@@ -32,13 +33,15 @@ public class DocumentProcessorGluonApplication extends Application {
     }
 
     private void postInit(Scene scene) {
-        Swatch.BLUE.assignTo(scene);
+        Theme.LIGHT.assignTo(scene);
+        Swatch.AMBER.assignTo(scene);
 
         scene.getStylesheets().add(DocumentProcessorGluonApplication.class.getResource("style.css").toExternalForm());
-        ((Stage) scene.getWindow()).getIcons().add(new Image(DocumentProcessorGluonApplication.class.getResourceAsStream("/icon.png")));
+        ((Stage) scene.getWindow()).getIcons().add(new Image(DocumentProcessorGluonApplication.class.getResourceAsStream("/drawerTitle.png")));
+        ((Stage) scene.getWindow()).setTitle("Document Processor App");
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         launch(args);
     }
 }

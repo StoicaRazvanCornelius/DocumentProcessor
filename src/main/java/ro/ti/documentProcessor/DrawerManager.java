@@ -19,14 +19,15 @@ public class DrawerManager {
 
     public static void buildDrawer(AppManager app) {
         NavigationDrawer drawer = app.getDrawer();
-        
-        NavigationDrawer.Header header = new NavigationDrawer.Header("Gluon Application",
-                "Multi View Project",
-                new Avatar(21, new Image(DrawerManager.class.getResourceAsStream("/icon.png"))));
+        NavigationDrawer.Header header = new NavigationDrawer.Header("Document Processor",
+                "Views",
+                new Avatar(40, new Image(DrawerManager.class.getResourceAsStream("/draweBannerrIcon.png"))));
+        header.setStyle("-fx-background-color: white;");
+       // ((Avatar)header.getGraphic()).
         drawer.setHeader(header);
-        
         final Item mainItem = new ViewItem("Main", MaterialDesignIcon.HOME.graphic(), MAIN_VIEW, ViewStackPolicy.SKIP);
         final Item settingsItem = new ViewItem("Settings", MaterialDesignIcon.DASHBOARD.graphic(), SETTINGS_VIEW);
+        System.out.println(mainItem.getStyle());
         drawer.getItems().addAll(mainItem, settingsItem);
         
         if (Platform.isDesktop()) {

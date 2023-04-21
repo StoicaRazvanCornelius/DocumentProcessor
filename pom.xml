@@ -59,6 +59,7 @@
             <artifactId>util</artifactId>
             <version>${attach.version}</version>
         </dependency>
+
     </dependencies>
 
     <repositories>
@@ -85,12 +86,14 @@
                 </configuration>
             </plugin>
 
+
             <plugin>
                 <groupId>com.gluonhq</groupId>
                 <artifactId>gluonfx-maven-plugin</artifactId>
                 <version>${gluonfx.plugin.version}</version>
                 <configuration>
-                    <target>${gluonfx.target}</target>
+                    <!-- <target>${gluonfx.target}</target> -->
+                    <target>Platform.DESKTOP</target>
                     <attachList>
                         <list>display</list>
                         <list>lifecycle</list>
@@ -102,6 +105,7 @@
                         <list>ro.ti.documentProcessor.views.SettingsPresenter</list>
                     </reflectionList>
                     <mainClass>${mainClassName}</mainClass>
+
                 </configuration>
             </plugin>
         </plugins>

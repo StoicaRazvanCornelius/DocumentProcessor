@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="javafx">
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../JAVAFX/openjfx-20_windows-x64_bin-sdk/javafx-sdk-20/javafx.base" />
+      <root url="file://$PROJECT_DIR$/../../JAVAFX/openjfx-20_windows-x64_bin-sdk/javafx-sdk-20/javafx.controls" />
+      <root url="file://$PROJECT_DIR$/../../JAVAFX/openjfx-20_windows-x64_bin-sdk/javafx-sdk-20/javafx.fxml" />
+      <root url="file://$PROJECT_DIR$/../../JAVAFX/openjfx-20_windows-x64_bin-sdk/javafx-sdk-20/javafx.graphics" />
+      <root url="file://$PROJECT_DIR$/../../JAVAFX/openjfx-20_windows-x64_bin-sdk/javafx-sdk-20/javafx.media" />
+      <root url="file://$PROJECT_DIR$/../../JAVAFX/openjfx-20_windows-x64_bin-sdk/javafx-sdk-20/javafx.swing" />
+      <root url="file://$PROJECT_DIR$/../../JAVAFX/openjfx-20_windows-x64_bin-sdk/javafx-sdk-20/javafx.web" />
+      <root url="file://$PROJECT_DIR$/../../JAVAFX/openjfx-20_windows-x64_bin-sdk/javafx-sdk-20/untitled/src" />
+    </SOURCES>
+  </library>
+</component>

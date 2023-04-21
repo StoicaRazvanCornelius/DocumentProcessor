@@ -1,3 +1,24 @@
 .root {
 
 }
+.container {
+    -fx-text-fill: blue;
+}
+
+/*
+.item {
+    -fx-background-color: -primary-swatch-800;
+}
+
+.item > .item-content:hover {
+    -fx-background-color: black;
+}
+
+.item:selected > .item-content {
+    -fx-background-color: green;
+}
+
+.item:selected:hover > .item-content {
+    -fx-background-color: lightgreen;
+}
+*/
