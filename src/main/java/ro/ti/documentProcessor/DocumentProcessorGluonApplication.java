@@ -1,6 +1,8 @@
 package ro.ti.documentProcessor;
 
 import com.gluonhq.charm.glisten.visual.Theme;
+import ro.ti.documentProcessor.views.ExportView;
+import ro.ti.documentProcessor.views.ImportView;
 import ro.ti.documentProcessor.views.MainView;
 import ro.ti.documentProcessor.views.SettingsView;
 import com.gluonhq.charm.glisten.application.AppManager;
@@ -17,12 +19,17 @@ public class DocumentProcessorGluonApplication extends Application {
     public static final String MAIN_VIEW = HOME_VIEW;
     public static final String SETTINGS_VIEW = "Settings View";
 
+    public static final String IMPORT_VIEW = "Import View";
+    public static final String EXPORT_VIEW = "Export View";
+
     private final AppManager appManager = AppManager.initialize(this::postInit);
 
     @Override
     public void init() {
         appManager.addViewFactory(MAIN_VIEW, () -> new MainView().getView());
         appManager.addViewFactory(SETTINGS_VIEW, () -> new SettingsView().getView());
+        appManager.addViewFactory(IMPORT_VIEW, () -> new ImportView().getView());
+        appManager.addViewFactory(EXPORT_VIEW, () -> new ExportView().getView());
 
         DrawerManager.buildDrawer(appManager);
     }

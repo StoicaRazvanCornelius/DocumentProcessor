@@ -11,6 +11,7 @@
    <center>
       <VBox alignment="CENTER" prefHeight="538.0" prefWidth="617.0" spacing="15.0" BorderPane.alignment="CENTER">
          <children>
+            <VBox fx:id="vBoxGauges" alignment="CENTER" prefHeight="616.0" prefWidth="1057.0" />
             <Label fx:id="label" text="Hello JavaFX World!" />
             <Button mnemonicParsing="false" onAction="#buttonClick" text="Change the World!">
                <graphic>

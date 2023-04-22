@@ -59,7 +59,11 @@
             <artifactId>util</artifactId>
             <version>${attach.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>eu.hansolo</groupId>
+            <artifactId>medusa</artifactId>
+            <version>17.1.5</version>
+        </dependency>
     </dependencies>
 
     <repositories>
