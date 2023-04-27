@@ -12,6 +12,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import ro.ti.documentProcessor.DocumentProcessorGluonApplication;
 
 public class MainPresenter {
 
@@ -53,7 +54,8 @@ public class MainPresenter {
     
     @FXML
     void buttonClick() {
+        DocumentProcessorGluonApplication.clickSound();
         label.setText("Hello!");
     }
-    
+
 }

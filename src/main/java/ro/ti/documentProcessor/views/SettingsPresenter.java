@@ -7,15 +7,29 @@ import com.gluonhq.charm.glisten.control.FloatingActionButton;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
 import javafx.fxml.FXML;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
+import ro.ti.documentProcessor.DocumentProcessorGluonApplication;
+
+import java.awt.*;
+import java.net.URISyntaxException;
 
 public class SettingsPresenter {
 
     @FXML
     private View settings;
 
-    public void initialize() {
+    @FXML
+    private static MediaView mediaView;
+
+    @FXML
+    Label settingsLabel;
+    private static double volume = 100;
+
+    public void initialize() throws URISyntaxException {
         settings.setShowTransitionFactory(BounceInRightTransition::new);
-        
+        mediaView = new MediaView();
         FloatingActionButton fab = new FloatingActionButton(MaterialDesignIcon.INFO.text,
                 e -> System.out.println("Info"));
         fab.showOn(settings);
@@ -30,5 +44,11 @@ public class SettingsPresenter {
                         System.out.println("Favorite")));
             }
         });
+
     }
+
+    public void clickSound() throws URISyntaxException {
+        DocumentProcessorGluonApplication.clickSound();
+    }
+
 }
