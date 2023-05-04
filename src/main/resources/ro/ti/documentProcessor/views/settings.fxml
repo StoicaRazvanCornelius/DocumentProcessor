@@ -2,10 +2,13 @@
 
 <?import com.gluonhq.charm.glisten.mvc.View?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -30,7 +33,7 @@
                   </VBox>
                   <VBox>
                      <children>
-                        <Label fx:id="settingsLablel71" onMouseClicked="#clickSound" prefWidth="3691.0" text="Audio">
+                        <Label fx:id="settingsLablel71" onMouseClicked="#clickSound" prefWidth="3691.0" text="Config">
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
@@ -38,124 +41,70 @@
                               <Font name="System Bold" size="24.0" />
                            </font>
                         </Label>
-                        <Slider blockIncrement="1.0" showTickLabels="true" snapToTicks="true" />
-                     </children>
-                  </VBox>
-                  <VBox>
-                     <children>
-                        <Label fx:id="settingsLablel72" onMouseClicked="#clickSound" prefWidth="3691.0" text="Audio">
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                           <font>
-                              <Font name="System Bold" size="24.0" />
-                           </font>
-                        </Label>
-                        <Slider blockIncrement="1.0" showTickLabels="true" snapToTicks="true" />
-                     </children>
-                  </VBox>
-                  <VBox>
-                     <children>
-                        <Label fx:id="settingsLablel73" onMouseClicked="#clickSound" prefWidth="3691.0" text="Audio">
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                           <font>
-                              <Font name="System Bold" size="24.0" />
-                           </font>
-                        </Label>
-                        <Slider blockIncrement="1.0" showTickLabels="true" snapToTicks="true" />
-                     </children>
-                  </VBox>
-                  <VBox>
-                     <children>
-                        <Label fx:id="settingsLablel74" onMouseClicked="#clickSound" prefWidth="3691.0" text="Audio">
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                           <font>
-                              <Font name="System Bold" size="24.0" />
-                           </font>
-                        </Label>
-                        <Slider blockIncrement="1.0" showTickLabels="true" snapToTicks="true" />
-                     </children>
-                  </VBox>
-                  <VBox>
-                     <children>
-                        <Label fx:id="settingsLablel75" onMouseClicked="#clickSound" prefWidth="3691.0" text="Audio">
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                           <font>
-                              <Font name="System Bold" size="24.0" />
-                           </font>
-                        </Label>
-                        <Slider blockIncrement="1.0" showTickLabels="true" snapToTicks="true" />
-                     </children>
-                  </VBox>
-                  <VBox>
-                     <children>
-                        <Label fx:id="settingsLablel76" onMouseClicked="#clickSound" prefWidth="3691.0" text="Audio">
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                           <font>
-                              <Font name="System Bold" size="24.0" />
-                           </font>
-                        </Label>
-                        <Slider blockIncrement="1.0" showTickLabels="true" snapToTicks="true" />
-                     </children>
-                  </VBox>
-                  <VBox>
-                     <children>
-                        <Label fx:id="settingsLablel77" onMouseClicked="#clickSound" prefWidth="3691.0" text="Audio">
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                           <font>
-                              <Font name="System Bold" size="24.0" />
-                           </font>
-                        </Label>
-                        <Slider blockIncrement="1.0" showTickLabels="true" snapToTicks="true" />
-                     </children>
-                  </VBox>
-                  <VBox>
-                     <children>
-                        <Label fx:id="settingsLablel78" onMouseClicked="#clickSound" prefWidth="3691.0" text="Audio">
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                           <font>
-                              <Font name="System Bold" size="24.0" />
-                           </font>
-                        </Label>
-                        <Slider blockIncrement="1.0" showTickLabels="true" snapToTicks="true" />
-                     </children>
-                  </VBox>
-                  <VBox>
-                     <children>
-                        <Label fx:id="settingsLablel79" onMouseClicked="#clickSound" prefWidth="3691.0" text="Audio">
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                           <font>
-                              <Font name="System Bold" size="24.0" />
-                           </font>
-                        </Label>
-                        <Slider blockIncrement="1.0" showTickLabels="true" snapToTicks="true" />
-                     </children>
-                  </VBox>
-                  <VBox>
-                     <children>
-                        <Label fx:id="settingsLablel710" onMouseClicked="#clickSound" prefWidth="3691.0" text="Audio">
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                           <font>
-                              <Font name="System Bold" size="24.0" />
-                           </font>
-                        </Label>
-                        <Slider blockIncrement="1.0" showTickLabels="true" snapToTicks="true" />
+                        <FlowPane alignment="CENTER" hgap="20.0" prefHeight="200.0" prefWidth="200.0" vgap="20.0">
+                           <children>
+                              <HBox>
+                                 <children>
+                                    <Label text="Screen resolution:" />
+                                    <ComboBox promptText="k;k;lk;klk" visibleRowCount="5" />
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label text="Screen resolution:" />
+                                    <ComboBox promptText="k;k;lk;klk" visibleRowCount="5" />
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label text="Screen resolution:" />
+                                    <ComboBox promptText="k;k;lk;klk" visibleRowCount="5" />
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label text="Screen resolution:" />
+                                    <ComboBox promptText="k;k;lk;klk" visibleRowCount="5" />
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label text="Screen resolution:" />
+                                    <ComboBox promptText="k;k;lk;klk" visibleRowCount="5" />
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label text="Screen resolution:" />
+                                    <ComboBox promptText="k;k;lk;klk" visibleRowCount="5" />
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label text="Screen resolution:" />
+                                    <ComboBox promptText="k;k;lk;klk" visibleRowCount="5" />
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label text="Screen resolution:" />
+                                    <ComboBox promptText="k;k;lk;klk" visibleRowCount="5" />
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label text="Screen resolution:" />
+                                    <ComboBox promptText="k;k;lk;klk" visibleRowCount="5" />
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label text="Screen resolution:" />
+                                    <ComboBox promptText="k;k;lk;klk" visibleRowCount="5" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </FlowPane>
                      </children>
                   </VBox>
                </children>
