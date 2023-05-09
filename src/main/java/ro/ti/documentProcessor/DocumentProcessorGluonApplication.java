@@ -15,7 +15,11 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Properties;
 
 import static com.gluonhq.charm.glisten.application.AppManager.HOME_VIEW;
 
@@ -31,6 +35,8 @@ public class DocumentProcessorGluonApplication extends Application {
 
     private static MediaView mediaView;
     private static double volume = 100;
+
+    private Properties properties;
 
     @Override
     public void init() throws URISyntaxException {
@@ -65,8 +71,23 @@ public class DocumentProcessorGluonApplication extends Application {
     }
 
     private void postInit(Scene scene) {
-        Theme.LIGHT.assignTo(scene);
-        Swatch.AMBER.assignTo(scene);
+
+        //properties file. Settings remain the same even if you close the app.
+        try {
+            //String configPropertiesPath = DocumentProcessorGluonApplication.class.getResource("config.properties").getPath();
+            String configPropertiesPath = DocumentProcessorGluonApplication.class.getResource("config.properties").getPath();
+            FileInputStream propsInput = new FileInputStream(configPropertiesPath);
+            properties = new Properties();
+            properties.load(propsInput);
+        }catch (FileNotFoundException e){
+            //run default interaface and create new config file
+        } catch (IOException e) {
+            //throw new RuntimeException(e);
+        }
+
+        //using the config file
+        Swatch.valueOf(properties.getProperty("swatch")).assignTo(scene);
+        Theme.valueOf(properties.getProperty("theme")).assignTo(scene);
 
         scene.getStylesheets().add(DocumentProcessorGluonApplication.class.getResource("style.css").toExternalForm());
         ((Stage) scene.getWindow()).getIcons().add(new Image(DocumentProcessorGluonApplication.class.getResourceAsStream("/draweBannerrIcon.png")));
