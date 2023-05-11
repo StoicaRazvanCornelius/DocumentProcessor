@@ -1,6 +1,6 @@
-ro\ti\documentProcessor\views\SettingsView.class
+ro\ti\documentProcessor\DrawerManager.class
 ro\ti\documentProcessor\views\SettingsPresenter.class
+ro\ti\documentProcessor\views\SettingsView.class
+ro\ti\documentProcessor\views\MainView.class
 ro\ti\documentProcessor\DocumentProcessorGluonApplication.class
 ro\ti\documentProcessor\views\MainPresenter.class
-ro\ti\documentProcessor\DrawerManager.class
-ro\ti\documentProcessor\views\MainView.class
