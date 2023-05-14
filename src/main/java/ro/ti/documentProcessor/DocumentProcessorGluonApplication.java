@@ -4,6 +4,7 @@ import com.gluonhq.charm.glisten.visual.Theme;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.stage.FileChooser;
 import ro.ti.documentProcessor.views.ExportView;
 import ro.ti.documentProcessor.views.ImportView;
 import ro.ti.documentProcessor.views.MainView;
@@ -19,6 +20,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import static com.gluonhq.charm.glisten.application.AppManager.HOME_VIEW;
