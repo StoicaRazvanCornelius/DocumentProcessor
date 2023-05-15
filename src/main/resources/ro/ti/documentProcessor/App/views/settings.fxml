@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.gluonhq.charm.glisten.control.DropdownButton?>
+<?import com.gluonhq.charm.glisten.mvc.View?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<View fx:id="settings" minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="600.0" stylesheets="@settings.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ro.ti.documentProcessor.app.views.SettingsPresenter">
+   <center>
+      <ScrollPane fitToWidth="true" BorderPane.alignment="CENTER">
+         <content>
+            <VBox>
+               <children>
+                  <VBox>
+                     <children>
+                        <Label fx:id="settingsLablel7" onMouseClicked="#clickSound" prefWidth="3691.0" text="Audio">
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Label>
+                        <Slider blockIncrement="1.0" showTickLabels="true" snapToTicks="true" />
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </VBox.margin>
+                  </VBox>
+                  <VBox>
+                     <children>
+                        <Label fx:id="settingsLablel71" onMouseClicked="#clickSound" prefHeight="0.0" prefWidth="598.0" text="Config">
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Label>
+                        <FlowPane alignment="CENTER" hgap="20.0" prefHeight="202.0" prefWidth="598.0" vgap="20.0">
+                           <children>
+                              <HBox>
+                                 <children>
+                                    <Label text="Screen resolution:">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <DropdownButton>
+                                        <items>
+                                            <MenuItem text="600x800" />
+                                            <MenuItem text="800x800" />
+                                            <MenuItem text="1920*1080" />
+                                        </items>
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </DropdownButton>
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label text="Theme Swatch">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <DropdownButton>
+                                       <items>
+                                          <MenuItem text="Amber" />
+                                          <MenuItem text="BlueGray" />
+                                          <MenuItem text="Brown" />
+                                          <MenuItem text="Cyon" />
+                                          <MenuItem text="Choice 2" />
+                                          <MenuItem text="Choice 3" />
+                                          <MenuItem text="Choice 1" />
+                                          <MenuItem text="Choice 2" />
+                                          <MenuItem text="Choice 3" />
+                                          <MenuItem text="Choice 1" />
+                                          <MenuItem text="Choice 2" />
+                                          <MenuItem text="Choice 3" />
+                                          <MenuItem text="Choice 1" />
+                                          <MenuItem text="Choice 2" />
+                                          <MenuItem text="Choice 3" />
+                                          <MenuItem text="Choice 1" />
+                                          <MenuItem text="Choice 2" />
+                                          <MenuItem text="Choice 3" />
+                                       </items>
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </DropdownButton>
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label text="Screen resolution:">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <DropdownButton>
+                                       <items>
+                                          <MenuItem text="Choice 1" />
+                                          <MenuItem text="Choice 2" />
+                                          <MenuItem text="Choice 3" />
+                                       </items>
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </DropdownButton>
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label text="Screen resolution:">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <DropdownButton>
+                                       <items>
+                                          <MenuItem text="Choice 1" />
+                                          <MenuItem text="Choice 2" />
+                                          <MenuItem text="Choice 3" />
+                                       </items>
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </DropdownButton>
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label text="Screen resolution:">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <DropdownButton>
+                                       <items>
+                                          <MenuItem text="Choice 1" />
+                                          <MenuItem text="Choice 2" />
+                                          <MenuItem text="Choice 3" />
+                                       </items>
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </DropdownButton>
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label text="Working with :">
+                                       <HBox.margin>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <CheckBox mnemonicParsing="false" text=".xls" />
+                                    <CheckBox mnemonicParsing="false" text=".pdf" />
+                                    <CheckBox mnemonicParsing="false" text=".rtf" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </FlowPane>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </VBox>
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </center>
+</View>

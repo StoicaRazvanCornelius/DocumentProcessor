@@ -4,28 +4,27 @@ import com.gluonhq.charm.glisten.visual.Theme;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import javafx.stage.FileChooser;
-import ro.ti.documentProcessor.views.ExportView;
-import ro.ti.documentProcessor.views.ImportView;
-import ro.ti.documentProcessor.views.MainView;
-import ro.ti.documentProcessor.views.SettingsView;
 import com.gluonhq.charm.glisten.application.AppManager;
 import com.gluonhq.charm.glisten.visual.Swatch;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import ro.ti.documentProcessor.app.DrawerManager;
+import ro.ti.documentProcessor.app.views.ExportView;
+import ro.ti.documentProcessor.app.views.ImportView;
+import ro.ti.documentProcessor.app.views.MainView;
+import ro.ti.documentProcessor.app.views.SettingsView;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.Properties;
 
 import static com.gluonhq.charm.glisten.application.AppManager.HOME_VIEW;
 
-public class DocumentProcessorGluonApplication extends Application {
+public class DocumentProcessorGluonApplication extends Application{
 
     public static final String MAIN_VIEW = HOME_VIEW;
     public static final String SETTINGS_VIEW = "Settings View";
@@ -40,6 +39,7 @@ public class DocumentProcessorGluonApplication extends Application {
 
     private Properties properties;
 
+    private String[] args;
     @Override
     public void init() throws URISyntaxException {
         appManager.addViewFactory(MAIN_VIEW, () -> new MainView().getView());

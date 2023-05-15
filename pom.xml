@@ -120,8 +120,8 @@
                         <list>storage</list>
                     </attachList>
                     <reflectionList>
-                        <list>ro.ti.documentProcessor.views.MainPresenter</list>
-                        <list>ro.ti.documentProcessor.views.SettingsPresenter</list>
+                        <list>ro.ti.documentProcessor.app.views.MainPresenter</list>
+                        <list>ro.ti.documentProcessor.app.views.SettingsPresenter</list>
                     </reflectionList>
                     <mainClass>${mainClassName}</mainClass>
 

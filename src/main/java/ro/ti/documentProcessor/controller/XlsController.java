@@ -109,4 +109,8 @@ public class XlsController {
         workbook.write(outputStream);
         workbook.close();
     }
+
+    public void checkIfFileIsModified() {
+
+    }
 }
