@@ -4,6 +4,8 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import ro.ti.documentProcessor.MVC.Interfaces.Controller;
+import ro.ti.documentProcessor.MVC.Interfaces.Model;
+import ro.ti.documentProcessor.MVC.Interfaces.View;
 
 import java.awt.*;
 import java.io.File;
@@ -16,12 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 public class XlsController implements Controller {
-    private volatile static XlsController controller;
-
-    public static synchronized XlsController getController(){
-        return (controller == null) ? (new XlsController()):(controller);
-    }
-
+    Model model;
+    static View view;
     public void openFile(String path) throws IOException {
         Desktop.getDesktop().open(new File(path));
     }
@@ -115,6 +113,32 @@ public class XlsController implements Controller {
         workbook.close();
     }
 
+    @Override
+    public void setView(View view) {
+        this.view=view;
+    }
+    public static void setStaticallyView(View staticallyView) {
+        view=staticallyView;
+    }
+    @Override
+    public void setModel(Model model) {
+        this.model=model;
+    }
+
+    @Override
+    public void testMVC() {
+        System.out.println("~MVC~");
+        System.out.print("From controller:\n");
+        System.out.print("View:");
+        view.testView();
+        System.out.print("Model:");
+        model.testModel();
+    }
+
+    @Override
+    public void testController() {
+        System.out.print("check\n");
+    }
 
 
     public void checkIfFileIsModified() {

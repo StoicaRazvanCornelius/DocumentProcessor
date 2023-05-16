@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import ro.ti.documentProcessor.MVC.Interfaces.Controller;
 import ro.ti.documentProcessor.MVC.Interfaces.View;
+import ro.ti.documentProcessor.MVC.controller.XlsController;
 import ro.ti.documentProcessor.app.DrawerManager;
 import ro.ti.documentProcessor.app.views.ExportView;
 import ro.ti.documentProcessor.app.views.ImportView;
@@ -38,11 +39,11 @@ public class DocumentProcessorGluonApplication extends Application implements ro
     private static volatile Controller controller;
     @Override
     public void init() throws URISyntaxException {
+        controller.setView(this);
         appManager.addViewFactory(MAIN_VIEW, () -> new MainView().getView());
         appManager.addViewFactory(SETTINGS_VIEW, () -> new SettingsView().getView());
         appManager.addViewFactory(IMPORT_VIEW, () -> new ImportView().getView());
         appManager.addViewFactory(EXPORT_VIEW, () -> new ExportView().getView());
-
 
         mediaView = new MediaView();
 
@@ -96,6 +97,14 @@ public class DocumentProcessorGluonApplication extends Application implements ro
     public View getView() throws InterruptedException {
         return null;
     }
+
+    @Override
+    public void testView() {
+        System.out.print("check\n");
+        System.out.print("  From view:\n -controller: ");
+        controller.testController();
+    }
+
 
     public static Controller getController() {
         return controller;
