@@ -56,6 +56,9 @@ public class ImportPresenter {
         File file;
         if((file= fileChooser.showOpenDialog(theStage))!=null){
             changeInterface();
+
+
+
         }
         this.pathText.setText(file.getAbsolutePath());
 
@@ -63,7 +66,6 @@ public class ImportPresenter {
     }
 
     private void changeInterface() {
-
         openExcelBtn = new Button();
         openExcelBtn.setText("Open in Excel");;
         openExcelBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -76,7 +78,7 @@ public class ImportPresenter {
 
         cancelBtn = new Button();
         cancelBtn.setText("Cancel");;
-        openExcelBtn.setOnAction(new EventHandler<ActionEvent>() {
+        cancelBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 cancel(event);

@@ -1,8 +1,9 @@
-package ro.ti.documentProcessor.controller;
+package ro.ti.documentProcessor.MVC.controller;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import ro.ti.documentProcessor.MVC.Interfaces.Controller;
 
 import java.awt.*;
 import java.io.File;
@@ -14,17 +15,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class XlsController {
-    private static XlsController controller;
-    public static XlsController getController(){
+public class XlsController implements Controller {
+    private volatile static XlsController controller;
+
+    public static synchronized XlsController getController(){
         return (controller == null) ? (new XlsController()):(controller);
     }
 
     public void openFile(String path) throws IOException {
         Desktop.getDesktop().open(new File(path));
     }
-    public void readFromFile(File file) throws IOException {
-        FileInputStream fileStream = new FileInputStream(file);
+
+    @Override
+    public void readFromFile(String path) throws IOException {
+        FileInputStream fileStream = new FileInputStream(new File(path));
         Workbook workbook = new XSSFWorkbook(fileStream);
         Sheet sheet = workbook.getSheetAt(0);
 
@@ -63,7 +67,8 @@ public class XlsController {
         }
     }
 
-    public void writeToFile() throws IOException {
+    @Override
+    public void writeToFile(String path, String name) throws IOException {
         Workbook workbook = new XSSFWorkbook();
 
         Sheet sheet = workbook.createSheet("Persons");
@@ -102,13 +107,15 @@ public class XlsController {
         cell.setCellValue(20);
         cell.setCellStyle(style);
 
-        String path ="E:\\JavaProjects\\DocumentProcessor\\src\\main\\resources\\xlsFiles\\";
+        path ="E:\\JavaProjects\\DocumentProcessor\\src\\main\\resources\\xlsFiles\\";
         String fileLocation = path.substring(0, path.length()) + "temp.xlsx";
 
         FileOutputStream outputStream = new FileOutputStream(fileLocation);
         workbook.write(outputStream);
         workbook.close();
     }
+
+
 
     public void checkIfFileIsModified() {
 

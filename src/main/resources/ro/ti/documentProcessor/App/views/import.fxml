@@ -19,7 +19,7 @@
 
 <View fx:id="importView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" stylesheets="@import.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ro.ti.documentProcessor.app.views.ImportPresenter">
    <center>
-      <ScrollPane hbarPolicy="NEVER" BorderPane.alignment="CENTER">
+      <ScrollPane fitToWidth="true" hbarPolicy="NEVER" BorderPane.alignment="CENTER">
          <content>
             <VBox alignment="CENTER">
                <children>
@@ -56,22 +56,16 @@
                                     </AutoCompleteTextField>
                                  </children>
                               </HBox>
-                              <HBox fx:id="interactableButtons" alignment="CENTER">
+                              <HBox fx:id="interactableButtons" alignment="CENTER" spacing="10.0">
                                  <children>
                                     <Button fx:id="openFileBtn" mnemonicParsing="false" onAction="#openFile" text="Open">
-                                       <padding>
-                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                       </padding>
                                        <HBox.margin>
-                                          <Insets left="10.0" right="10.0" />
+                                          <Insets />
                                        </HBox.margin>
                                     </Button>
                                     <Button fx:id="saveFileBtn" mnemonicParsing="false" onAction="#saveFile" text="Save">
-                                       <padding>
-                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                       </padding>
                                        <HBox.margin>
-                                          <Insets left="10.0" right="10.0" />
+                                          <Insets />
                                        </HBox.margin>
                                     </Button>
                                  </children>

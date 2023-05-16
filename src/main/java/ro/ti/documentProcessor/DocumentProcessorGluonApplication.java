@@ -10,6 +10,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import ro.ti.documentProcessor.MVC.Interfaces.Controller;
+import ro.ti.documentProcessor.MVC.Interfaces.View;
 import ro.ti.documentProcessor.app.DrawerManager;
 import ro.ti.documentProcessor.app.views.ExportView;
 import ro.ti.documentProcessor.app.views.ImportView;
@@ -24,22 +26,16 @@ import java.util.Properties;
 
 import static com.gluonhq.charm.glisten.application.AppManager.HOME_VIEW;
 
-public class DocumentProcessorGluonApplication extends Application{
-
+public class DocumentProcessorGluonApplication extends Application implements ro.ti.documentProcessor.MVC.Interfaces.View  {
     public static final String MAIN_VIEW = HOME_VIEW;
     public static final String SETTINGS_VIEW = "Settings View";
-
     public static final String IMPORT_VIEW = "Import View";
     public static final String EXPORT_VIEW = "Export View";
-
-    private final AppManager appManager = AppManager.initialize(this::postInit);
-
+    private AppManager appManager = AppManager.initialize(this::postInit);
     private static MediaView mediaView;
     private static double volume = 100;
-
     private Properties properties;
-
-    private String[] args;
+    private static volatile Controller controller;
     @Override
     public void init() throws URISyntaxException {
         appManager.addViewFactory(MAIN_VIEW, () -> new MainView().getView());
@@ -96,7 +92,22 @@ public class DocumentProcessorGluonApplication extends Application{
         ((Stage) scene.getWindow()).setTitle("Document Processor App");
     }
 
-    public static void main(String[] args) {
+    @Override
+    public View getView() throws InterruptedException {
+        return null;
+    }
+
+    public static Controller getController() {
+        return controller;
+    }
+
+    public static void setController(Controller externController) {
+       controller=externController;
+    }
+
+    /*
+    public static main(String[] args) {
         launch(args);
     }
+     */
 }
