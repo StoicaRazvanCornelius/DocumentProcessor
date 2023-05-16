@@ -22,6 +22,7 @@ public class XlsController implements Controller {
     static View view;
     public void openFile(String path) throws IOException {
         Desktop.getDesktop().open(new File(path));
+        FileChecker.checkForNewerVersion(path);
     }
 
     @Override

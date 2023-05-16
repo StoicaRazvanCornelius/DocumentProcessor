@@ -11,10 +11,13 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
+import ro.ti.documentProcessor.DocumentProcessorGluonApplication;
+import ro.ti.documentProcessor.MVC.Interfaces.Controller;
 
 import java.awt.*;
 import java.io.File;
@@ -26,10 +29,10 @@ public class ImportPresenter {
     private View importView;
 
     @FXML
-    private Button openFileBtn;
+    private Button pickFileBtn;
 
     @FXML
-    private AutoCompleteTextField pathText;
+    private TextArea pathText;
 
     Button openExcelBtn;
     Button cancelBtn;
@@ -48,7 +51,7 @@ public class ImportPresenter {
         });
     }
 
-    public void openFile(ActionEvent actionEvent){
+    public void pickFile(ActionEvent actionEvent){
         Node source = (Node) actionEvent.getSource();
         Window theStage = source.getScene().getWindow();
         FileChooser fileChooser= new FileChooser();
@@ -99,13 +102,12 @@ public class ImportPresenter {
     }
 
     public void openInExcel(ActionEvent actionEvent) {
+        //org.apache.commons.io.FileUtils.isFileNewer();
         try {
-            //org.apache.commons.io.FileUtils.isFileNewer();
-            Desktop.getDesktop().open(new File(pathText.getText()));
+            DocumentProcessorGluonApplication.getController().openFile(pathText.getText());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        ;
     }
     public void cancel(ActionEvent actionEvent) {
 
