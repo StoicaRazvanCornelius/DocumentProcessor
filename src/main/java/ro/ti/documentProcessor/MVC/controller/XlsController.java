@@ -20,9 +20,14 @@ import java.util.Map;
 public class XlsController implements Controller {
     Model model;
     static View view;
-    public void openFile(String path) throws IOException {
-        Desktop.getDesktop().open(new File(path));
-        FileChecker.checkForNewerVersion(path);
+
+    public void openFile(String path)  {
+        try {
+            Desktop.getDesktop().open(new File(path));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        FileChecker.checkForNewerVersion(this,path);
     }
 
     @Override
@@ -139,6 +144,12 @@ public class XlsController implements Controller {
     @Override
     public void testController() {
         System.out.print("check\n");
+    }
+
+    @Override
+    public void reloadFile(String path, String format) {
+        //string sss= model.processFile();
+        //view.loadFile(sss);
     }
 
 

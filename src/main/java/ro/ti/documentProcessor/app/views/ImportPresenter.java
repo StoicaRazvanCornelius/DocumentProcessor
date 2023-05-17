@@ -102,12 +102,7 @@ public class ImportPresenter {
     }
 
     public void openInExcel(ActionEvent actionEvent) {
-        //org.apache.commons.io.FileUtils.isFileNewer();
-        try {
-            DocumentProcessorGluonApplication.getController().openFile(pathText.getText());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        DocumentProcessorGluonApplication.getController().openFile(pathText.getText());
     }
     public void cancel(ActionEvent actionEvent) {
 
