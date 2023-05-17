@@ -1,3 +1,7 @@
-.view {
 
+.helv-b-24{
+    -fx-font-family: "Helvetica neue bold","",SansSerif;
+    -fx-font-size: 24px !important;
+}
+.view {
 }

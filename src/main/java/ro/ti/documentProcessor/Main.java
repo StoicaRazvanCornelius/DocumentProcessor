@@ -20,12 +20,11 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
 
         controller= new XlsController();
-        controller.openFile("E:\\JavaProjects\\DocumentProcessor\\src\\main\\resources\\xlsFiles\\Book1.xlsx");
-        //model = new ModelXlsProcessor();
-        //model.setController(controller);
-        //controller.setModel(model);
-        //DocumentProcessorGluonApplication.setController(controller);
-        //Application.launch(DocumentProcessorGluonApplication.class,new String[]{"E:/JAVAFX/openjfx-20_windows-x64_bin-sdk/javafx-sdk-20/lib"});
+        model = new ModelXlsProcessor();
+        model.setController(controller);
+        controller.setModel(model);
+        DocumentProcessorGluonApplication.setController(controller);
+        Application.launch(DocumentProcessorGluonApplication.class,new String[]{"E:/JAVAFX/openjfx-20_windows-x64_bin-sdk/javafx-sdk-20/lib"});
 
     }
 
