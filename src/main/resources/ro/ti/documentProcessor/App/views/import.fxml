@@ -5,11 +5,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TreeTableColumn?>
-<?import javafx.scene.control.TreeTableView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
@@ -49,17 +45,15 @@
                                           <Font name="System Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <TextArea fx:id="pathText" editable="false" />
+                                    <TextArea fx:id="pathText" editable="false">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font></TextArea>
                                  </children>
                               </HBox>
                               <HBox fx:id="interactableButtons" alignment="CENTER" spacing="10.0">
                                  <children>
                                     <Button fx:id="pickFileBtn" mnemonicParsing="false" onAction="#pickFile" text="Pick">
-                                       <HBox.margin>
-                                          <Insets />
-                                       </HBox.margin>
-                                    </Button>
-                                    <Button fx:id="saveFileBtn" mnemonicParsing="false" onAction="#saveFile" text="Save">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
@@ -77,7 +71,7 @@
                      </VBox.margin>
                   </VBox>
                   <VBox />
-                  <VBox>
+                  <VBox fx:id="contentBox">
                      <children>
                         <Label fx:id="settingsLablel711" onMouseClicked="#clickSound" styleClass="helv-b-24" text="Content">
                            <padding>
@@ -87,63 +81,6 @@
                               <Font name="System Bold" size="24.0" />
                            </font>
                         </Label>
-                        <TabPane tabClosingPolicy="UNAVAILABLE">
-                          <tabs>
-                            <Tab text="Page1">
-                                 <content>
-                                    <ScrollPane pannable="true">
-                                       <content>
-                                          <TreeTableView>
-                                            <columns>
-                                              <TreeTableColumn prefWidth="75.0" text="C1" />
-                                              <TreeTableColumn prefWidth="75.0" text="C2" />
-                                                <TreeTableColumn prefWidth="75.0" text="C2" />
-                                                <TreeTableColumn prefWidth="75.0" text="C2" />
-                                                <TreeTableColumn prefWidth="75.0" text="C2" />
-                                            </columns>
-                                             <columnResizePolicy>
-                                                <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                             </columnResizePolicy>
-                                          </TreeTableView>
-                                       </content>
-                                    </ScrollPane>
-                                 </content>
-                              </Tab>
-                              <Tab text="Page2">
-                                 <content>
-                                    <ScrollPane pannable="true">
-                                       <content>
-                                          <TreeTableView>
-                                             <columns>
-                                                <TreeTableColumn prefWidth="75.0" text="C55" />
-                                                <TreeTableColumn prefWidth="75.0" text="C2" />
-                                                <TreeTableColumn prefWidth="75.0" text="C2" />
-                                                <TreeTableColumn prefWidth="75.0" text="C2" />
-                                                <TreeTableColumn prefWidth="75.0" text="C2" />
-                                                <TreeTableColumn prefWidth="75.0" text="C2" />
-                                                <TreeTableColumn prefWidth="75.0" text="C2" />
-                                                <TreeTableColumn prefWidth="75.0" text="C2" />
-                                                <TreeTableColumn prefWidth="75.0" text="C2" />
-                                                <TreeTableColumn prefWidth="75.0" text="C2" />
-                                                <TreeTableColumn prefWidth="75.0" text="C2" />
-                                                <TreeTableColumn prefWidth="75.0" text="C2" />
-                                                <TreeTableColumn prefWidth="75.0" text="C2" />
-                                                <TreeTableColumn prefWidth="75.0" text="C2" />
-                                                <TreeTableColumn prefWidth="75.0" text="C2" />
-                                                <TreeTableColumn prefWidth="75.0" text="C2" />
-                                                <TreeTableColumn prefWidth="75.0" text="C2" />
-                                                <TreeTableColumn prefWidth="75.0" text="C2" />
-                                             </columns>
-                                             <columnResizePolicy>
-                                                <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                             </columnResizePolicy>
-                                          </TreeTableView>
-                                       </content>
-                                    </ScrollPane>
-                                 </content>
-                              </Tab>
-                          </tabs>
-                        </TabPane>
                      </children>
                   </VBox>
                </children>
