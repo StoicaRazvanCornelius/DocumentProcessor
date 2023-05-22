@@ -3,6 +3,7 @@ package ro.ti.documentProcessor.MVC.controller;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STRestartNumber;
 import ro.ti.documentProcessor.MVC.Interfaces.Controller;
 import ro.ti.documentProcessor.MVC.Interfaces.Model;
 import ro.ti.documentProcessor.MVC.Interfaces.View;
@@ -31,7 +32,7 @@ public class XlsController implements Controller {
     }
 
     @Override
-    public void readFromFile(String path) throws IOException {
+    public HashMap<String, ArrayList<String>> readFromFile(String path) throws IOException {
         FileInputStream fileStream = new FileInputStream(new File(path));
         Workbook workbook = new XSSFWorkbook(fileStream);
         Sheet sheet = workbook.getSheetAt(0);
@@ -69,6 +70,7 @@ public class XlsController implements Controller {
             }
             System.out.println();
         }
+        return new HashMap<>();
     }
 
     @Override

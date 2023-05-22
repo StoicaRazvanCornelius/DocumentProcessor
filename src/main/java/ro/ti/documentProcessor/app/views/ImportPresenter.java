@@ -27,6 +27,7 @@ import ro.ti.documentProcessor.app.Cell;
 import ro.ti.documentProcessor.app.RowData;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -54,7 +55,6 @@ public class ImportPresenter {
     VBox contentBox;
 
     TabPane tabs;
-    HashMap<String,TableView> pages;
 
     public void initialize() {
 
@@ -92,10 +92,9 @@ public class ImportPresenter {
                 cancel(event);
             }
         });
-        pages = new HashMap<>();
     }
 
-    public void pickFile(ActionEvent actionEvent){
+    public void pickFile(ActionEvent actionEvent) throws IOException {
         Node source = (Node) actionEvent.getSource();
         Window theStage = source.getScene().getWindow();
         FileChooser fileChooser= new FileChooser();
@@ -103,7 +102,18 @@ public class ImportPresenter {
         File file;
         if((file= fileChooser.showOpenDialog(theStage))!=null){
             changeInterfaceFilePicked();
-            showExcelFileContent();
+            //DocumentProcessorGluonApplication.getController().readFromFile(file.getAbsolutePath());
+            HashMap<String, ArrayList<String>> fileFromController = new HashMap<>();
+            ArrayList<String> pagesName = new ArrayList<>();
+            pagesName.add("0");
+            pagesName.add("1");
+            pagesName.add("2");
+            pagesName.add("3");
+            pagesName.add("4");
+            fileFromController.put("pagesName",pagesName);
+
+
+            showExcelFileContent(fileFromController);
             this.pathText.setText(file.getAbsolutePath());
 
         }
@@ -111,96 +121,88 @@ public class ImportPresenter {
 
     }
 
-    private void showExcelFileContent() {
+    private void showExcelFileContent(HashMap<String, ArrayList<String>> file) {
         contentBox.setVisible(true);
         tabs= new TabPane();
         tabs.setSide(Side.BOTTOM);
-        ArrayList<String> names= new ArrayList<>();
-        names.add("0");
-        names.add("1");
-        names.add("2");
-        names.add("3");
-        setTabs(names);
         contentBox.getChildren().add(tabs);
+
+        ArrayList<String> pagesName= new ArrayList<>();
+        pagesName.add("0");
+        pagesName.add("1");
+        pagesName.add("2");
+        pagesName.add("3");
+        file.put("pagesNames",pagesName);
+
+        for (String pageName:pagesName){
+            ArrayList<String> indexesArray = new ArrayList<>();
+            for (int i =1;i<100;i++){
+                indexesArray.add(String.valueOf(i));
+            }
+            file.put(pageName+"Indexes",indexesArray);
+            ArrayList<String> columnsName = new ArrayList<>();
+            columnsName.add("A");
+            columnsName.add("B");
+            columnsName.add("C");
+            columnsName.add("D");
+            columnsName.add("E");
+            file.put(pageName+"Columns",columnsName);
+            for (int i =1;i<100;i++){
+                ArrayList<String> row =new ArrayList();
+                for(String column: file.get(pageName+"Columns"))
+                {
+                    row.add("0");
+                }
+                file.put(pageName+i,row);
+            }
+
+        }
+        setTabs(file,file.get("pagesNames"));
 
     }
 
-    private void setTabs(ArrayList<String> pagesName) {
-        for (String name :
-                pagesName) {
-            ScrollPane page = new ScrollPane();
-
-
+    private void setTabs(HashMap<String,ArrayList<String>> file, ArrayList<String> pagesName) {
+        for (String pageName:
+             pagesName) {
+            TableView<RowData> tableView = new TableView<>();
+            tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
             // Create the ArrayList<String> containing your data
-            ArrayList<String> cellDataList = new ArrayList<>();
-            cellDataList.add("Cell 1");
-            cellDataList.add("Cell 2");
-            cellDataList.add("Cell 3");
-
-            // Create the data model class for the row
 
             // Create the TableView and its columns
-            TableView<RowData> tableView = new TableView<>();
-            TableColumn<RowData, String>[] columns = new TableColumn[cellDataList.size()];
+            ArrayList<String> columnNames = file.get(pageName+"Columns");
+            TableColumn<RowData, String>[] columns = new TableColumn[columnNames.size()];
+
 
             // Create and configure the columns
-            for (int i = 0; i < cellDataList.size(); i++) {
+            for (int i = 0; i < columnNames.size(); i++) {
                 final int columnIndex = i;
-                TableColumn<RowData, String> column = new TableColumn<>("Cell " + (columnIndex + 1));
+                TableColumn<RowData, String> column = new TableColumn<>(columnNames.get(columnIndex));
                 column.setCellValueFactory(cellData -> cellData.getValue().getCells().get(columnIndex).getValue());
                 column.setCellFactory(TextFieldTableCell.forTableColumn());
                 columns[i] = column;
             }
 
-            // Set the items for the TableView
-            ObservableList<RowData> data = FXCollections.observableArrayList(new RowData(cellDataList));
+
+            ObservableList<RowData> data=FXCollections.observableArrayList();
+
+            ArrayList<String> rowIndexes = file.get(pageName+"Indexes");
+            for (String index:
+                 rowIndexes) {
+                ArrayList<String> rowDataList = file.get(pageName+index);
+                data.add(new RowData(rowDataList));
+            }
 
             tableView.setItems(data);
             tableView.getColumns().addAll(columns);
 
-            ArrayList<String>cc = new ArrayList<>();
-            cc.add("sdd");
-            cc.add("sdd");
-            cc.add("sdd");
-            cc.add("sdd");
-            data.add(new RowData(cc));
-
-            tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+            ScrollPane page = new ScrollPane();
             page.setContent(tableView);
-            tabs.getTabs().add(new Tab(name,page));
-            pages.put(name,tableView);
+            tabs.getTabs().add(new Tab(pageName,page));
 
-            //ArrayList<String> columnsName= new ArrayList<>();
-            //columnsName.add("A");
-            //columnsName.add("B");
-            //columnsName.add("C");
-            //columnsName.add("D");
-            //columnsName.add("E");
-            //String tableName = name;
-            //setColumnValues(tableName, columnsName);
         }
     }
 
     private void setColumnValues(String tableName, ArrayList<String> columnsName) {
-        for (String columnName:
-             columnsName) {
-            TableColumn cellValueColumn = new TableColumn<Cell, String>(columnName); //object from which we extract, what we extract
-            //cellValueColumn.setCellValueFactory(new PropertyValueFactory<Cell,String>("value"));
-            //cellValueColumn.setCellValueFactory(cellData->{
-
-            //    return  0;
-            //}
-            //);
-
-            //pages.get(tableName).getColumns().add(cellValueColumn);
-
-
-        }
-       // pages.get(tableName).getItems().add(new Cell("ana"));
-       // pages.get(tableName).getItems().add(new Cell("Dana"));
-       // pages.get(tableName).getItems().add(new Cell("Fana"));
-       // pages.get(tableName).getItems().add(new Cell("Wana"));
-      //  pages.get(tableName).getItems().add(new Cell("Mana"));
 
     }
 
@@ -226,8 +228,7 @@ public class ImportPresenter {
     }
 
     public void openInExcel(ActionEvent actionEvent) {
-
-       // DocumentProcessorGluonApplication.getController().openFile(pathText.getText());
+        DocumentProcessorGluonApplication.getController().openFile(pathText.getText());
     }
     public void cancel(ActionEvent actionEvent) {
         contentBox.setVisible(false);
