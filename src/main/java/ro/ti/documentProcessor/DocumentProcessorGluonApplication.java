@@ -12,12 +12,8 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import ro.ti.documentProcessor.MVC.Interfaces.Controller;
 import ro.ti.documentProcessor.MVC.Interfaces.View;
-import ro.ti.documentProcessor.MVC.controller.XlsController;
 import ro.ti.documentProcessor.app.DrawerManager;
-import ro.ti.documentProcessor.app.views.ExportView;
-import ro.ti.documentProcessor.app.views.ImportView;
-import ro.ti.documentProcessor.app.views.MainView;
-import ro.ti.documentProcessor.app.views.SettingsView;
+import ro.ti.documentProcessor.app.views.*;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,14 +28,14 @@ public class DocumentProcessorGluonApplication extends Application implements ro
     public static final String SETTINGS_VIEW = "Settings View";
     public static final String IMPORT_VIEW = "Import View";
     public static final String EXPORT_VIEW = "Export View";
-    private AppManager appManager = AppManager.initialize(this::postInit);
-    private static MediaView mediaView;
-    private static double volume = 100;
+    private AppManager appManager;
+    private  MediaView mediaView;
+    private  double volume = 100;
     private Properties properties;
     private static volatile Controller controller;
     @Override
     public void init() throws URISyntaxException {
-        controller.setView(this);
+        appManager = AppManager.initialize(this::postInit);
         appManager.addViewFactory(MAIN_VIEW, () -> new MainView().getView());
         appManager.addViewFactory(SETTINGS_VIEW, () -> new SettingsView().getView());
         appManager.addViewFactory(IMPORT_VIEW, () -> new ImportView().getView());
@@ -59,14 +55,19 @@ public class DocumentProcessorGluonApplication extends Application implements ro
         DrawerManager.buildDrawer(appManager);
     }
 
-    public static void clickSound(){
+    public void clickSound(){
         mediaView.getMediaPlayer().setVolume(volume);
         mediaView.getMediaPlayer().seek(mediaView.getMediaPlayer().getStartTime());
         mediaView.getMediaPlayer().play();
     }
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        appManager.start(primaryStage);
+    public void start(Stage primaryStage) {
+        try {
+            appManager.start(primaryStage);
+        }catch (Exception e){
+
+
+        }
     }
 
     private void postInit(Scene scene) {
@@ -95,7 +96,7 @@ public class DocumentProcessorGluonApplication extends Application implements ro
 
     @Override
     public View getView() throws InterruptedException {
-        return null;
+        return this;
     }
 
     @Override
@@ -110,13 +111,12 @@ public class DocumentProcessorGluonApplication extends Application implements ro
         return controller;
     }
 
-    public static void setController(Controller externController) {
+    public void setController(Controller externController) {
        controller=externController;
     }
 
-    /*
-    public static main(String[] args) {
+    public static void main(String[] args) {
         launch(args);
     }
-     */
+
 }

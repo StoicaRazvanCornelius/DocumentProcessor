@@ -21,14 +21,13 @@ public class Main {
 
         controller= new XlsController();
         model = new ModelXlsProcessor();
-        model.setController(controller);
+        DocumentProcessorGluonApplication myApp = new DocumentProcessorGluonApplication();
         controller.setModel(model);
-        DocumentProcessorGluonApplication.setController(controller);
-        Application.launch(DocumentProcessorGluonApplication.class,new String[]{"E:/JAVAFX/openjfx-20_windows-x64_bin-sdk/javafx-sdk-20/lib"});
+        controller.setView(myApp);
+        model.setController(controller);
+        myApp.setController(controller);
+        myApp.main(new String[]{"E:/JAVAFX/openjfx-20_windows-x64_bin-sdk/javafx-sdk-20/lib"});
 
     }
 
-    public static void setView(View appView){
-        view= appView;
-    }
 }

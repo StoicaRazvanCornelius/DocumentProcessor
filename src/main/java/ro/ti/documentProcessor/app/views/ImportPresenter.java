@@ -5,9 +5,8 @@ import com.gluonhq.charm.glisten.application.AppManager;
 import com.gluonhq.charm.glisten.control.AppBar;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -17,18 +16,15 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
-import javafx.util.Callback;
 import ro.ti.documentProcessor.DocumentProcessorGluonApplication;
-import ro.ti.documentProcessor.MVC.Interfaces.Cell;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableView;
+import ro.ti.documentProcessor.app.Cell;
+import ro.ti.documentProcessor.app.RowData;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -61,6 +57,7 @@ public class ImportPresenter {
     HashMap<String,TableView> pages;
 
     public void initialize() {
+
         importView.setShowTransitionFactory(BounceInRightTransition::new);
         importView.showingProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
@@ -132,34 +129,84 @@ public class ImportPresenter {
         for (String name :
                 pagesName) {
             ScrollPane page = new ScrollPane();
-            TableView tableView= new TableView<String>();
+
+
+            // Create the ArrayList<String> containing your data
+            ArrayList<String> cellDataList = new ArrayList<>();
+            cellDataList.add("Cell 1");
+            cellDataList.add("Cell 2");
+            cellDataList.add("Cell 3");
+
+            // Create the data model class for the row
+
+            // Create the TableView and its columns
+            TableView<RowData> tableView = new TableView<>();
+            TableColumn<RowData, String>[] columns = new TableColumn[cellDataList.size()];
+
+            // Create and configure the columns
+            for (int i = 0; i < cellDataList.size(); i++) {
+                final int columnIndex = i;
+                TableColumn<RowData, String> column = new TableColumn<>("Cell " + (columnIndex + 1));
+                column.setCellValueFactory(cellData -> cellData.getValue().getCells().get(columnIndex).getValue());
+                column.setCellFactory(TextFieldTableCell.forTableColumn());
+                columns[i] = column;
+            }
+
+            // Set the items for the TableView
+            ObservableList<RowData> data = FXCollections.observableArrayList(new RowData(cellDataList));
+
+            tableView.setItems(data);
+            tableView.getColumns().addAll(columns);
+
+            ArrayList<String>cc = new ArrayList<>();
+            cc.add("sdd");
+            cc.add("sdd");
+            cc.add("sdd");
+            cc.add("sdd");
+            data.add(new RowData(cc));
+
             tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
             page.setContent(tableView);
             tabs.getTabs().add(new Tab(name,page));
             pages.put(name,tableView);
 
-            ArrayList<String> columnsName= new ArrayList<>();
-            columnsName.add("A");
-            columnsName.add("B");
-            columnsName.add("C");
-            columnsName.add("D");
-            columnsName.add("E");
-            String tableName = name;
-            setColumnValues(tableName, columnsName);
+            //ArrayList<String> columnsName= new ArrayList<>();
+            //columnsName.add("A");
+            //columnsName.add("B");
+            //columnsName.add("C");
+            //columnsName.add("D");
+            //columnsName.add("E");
+            //String tableName = name;
+            //setColumnValues(tableName, columnsName);
         }
     }
 
     private void setColumnValues(String tableName, ArrayList<String> columnsName) {
         for (String columnName:
              columnsName) {
-            pages.get(tableName).getColumns().add(new TableColumn<>(columnName));
+            TableColumn cellValueColumn = new TableColumn<Cell, String>(columnName); //object from which we extract, what we extract
+            //cellValueColumn.setCellValueFactory(new PropertyValueFactory<Cell,String>("value"));
+            //cellValueColumn.setCellValueFactory(cellData->{
+
+            //    return  0;
+            //}
+            //);
+
+            //pages.get(tableName).getColumns().add(cellValueColumn);
+
+
         }
+       // pages.get(tableName).getItems().add(new Cell("ana"));
+       // pages.get(tableName).getItems().add(new Cell("Dana"));
+       // pages.get(tableName).getItems().add(new Cell("Fana"));
+       // pages.get(tableName).getItems().add(new Cell("Wana"));
+      //  pages.get(tableName).getItems().add(new Cell("Mana"));
+
     }
 
     private void setCellValues() {
 
     }
-
     private void changeInterfaceFilePicked() {
         interactableButtons.getChildren().add(openExcelBtn);
         interactableButtons.getChildren().add(saveFileBtn);
@@ -169,7 +216,9 @@ public class ImportPresenter {
     public void clickSound(MouseEvent mouseEvent) {
     }
 
-    public void saveFile(ActionEvent actionEvent) {
+    public void saveFile(ActionEvent actionEvent)
+    {
+        DocumentProcessorGluonApplication.getController().testController();
         // directory save
         // DirectoryChooser directoryChooser = new DirectoryChooser();
         // directoryChooser.setTitle("Save in");
@@ -177,10 +226,15 @@ public class ImportPresenter {
     }
 
     public void openInExcel(ActionEvent actionEvent) {
-        DocumentProcessorGluonApplication.getController().openFile(pathText.getText());
+
+       // DocumentProcessorGluonApplication.getController().openFile(pathText.getText());
     }
     public void cancel(ActionEvent actionEvent) {
         contentBox.setVisible(false);
         interactableButtons.getChildren().remove(1,interactableButtons.getChildren().size());
+    }
+
+    public void setMainRefrence(DocumentProcessorGluonApplication documentProcessorGluonApplication) {
+        documentProcessorGluonApplication.getController().testController();
     }
 }

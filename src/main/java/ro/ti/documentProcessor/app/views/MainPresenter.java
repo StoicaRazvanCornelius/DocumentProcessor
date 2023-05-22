@@ -52,7 +52,7 @@ public class MainPresenter {
     
     @FXML
     void buttonClick() {
-        DocumentProcessorGluonApplication.clickSound();
+        //DocumentProcessorGluonApplication.clickSound();
         label.setText("Hello!");
     }
 

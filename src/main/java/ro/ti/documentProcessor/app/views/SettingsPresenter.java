@@ -46,7 +46,9 @@ public class SettingsPresenter {
     }
 
     public void clickSound() throws URISyntaxException {
-        DocumentProcessorGluonApplication.clickSound();
+        clickSound();
     }
+
+
 
 }
