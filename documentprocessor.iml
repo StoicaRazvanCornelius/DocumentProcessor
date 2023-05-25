@@ -22,6 +22,7 @@
     <orderEntry type="library" name="Maven: com.gluonhq.attach:display:4.0.18" level="project" />
     <orderEntry type="library" name="Maven: com.gluonhq.attach:lifecycle:4.0.18" level="project" />
     <orderEntry type="library" name="Maven: com.gluonhq.attach:statusbar:4.0.18" level="project" />
+    <orderEntry type="library" name="Maven: org.controlsfx:controlsfx:11.1.2" level="project" />
     <orderEntry type="library" name="Maven: com.gluonhq.attach:storage:4.0.18" level="project" />
     <orderEntry type="library" name="Maven: com.gluonhq.attach:util:4.0.18" level="project" />
     <orderEntry type="library" name="Maven: eu.hansolo:medusa:17.1.5" level="project" />

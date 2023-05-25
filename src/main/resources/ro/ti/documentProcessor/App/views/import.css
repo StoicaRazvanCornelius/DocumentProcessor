@@ -8,3 +8,6 @@
 .table-cell{
 
 }
+.tabPane{
+    -fx-background-color: #22FF!important;
+}

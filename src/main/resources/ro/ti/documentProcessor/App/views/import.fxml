@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -53,7 +52,7 @@
                               </HBox>
                               <HBox fx:id="interactableButtons" alignment="CENTER" spacing="10.0">
                                  <children>
-                                    <Button fx:id="pickFileBtn" mnemonicParsing="false" onAction="#pickFile" text="Pick">
+                                    <Button fx:id="pickFileBtn" mnemonicParsing="false" onAction="#pickFile" text="Add">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
@@ -71,9 +70,21 @@
                      </VBox.margin>
                   </VBox>
                   <VBox />
+                  <VBox fx:id="fileBox">
+                     <children>
+                        <Label fx:id="settingsLablel7111" onMouseClicked="#clickSound" styleClass="helv-b-24" text="Files">
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
                   <VBox fx:id="contentBox">
                      <children>
-                        <Label fx:id="settingsLablel711" onMouseClicked="#clickSound" styleClass="helv-b-24" text="Content">
+                        <Label fx:id="settingsLablel711" onMouseClicked="#clickSound" styleClass="helv-b-24" text="Data Preview">
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
@@ -91,7 +102,4 @@
          </padding>
       </ScrollPane>
    </center>
-   <bottom>
-      <StackPane BorderPane.alignment="CENTER" />
-   </bottom>
 </View>
