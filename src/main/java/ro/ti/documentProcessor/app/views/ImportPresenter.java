@@ -18,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -87,11 +88,41 @@ public class ImportPresenter {
         colExtension.setCellValueFactory(new PropertyValueFactory<>("extension"));
         TableColumn<Data, Timestamp> colLastModified = new TableColumn<>("Last modified");
         colLastModified.setCellValueFactory(new PropertyValueFactory<>("lastModified"));
+        TableColumn<Data, Void> colClientName = new TableColumn<>("Client Name");
 
-        table.getColumns().addAll(colName,colExtension,colLastModified );
 
-        TableColumn<Data, Void> colBtn = new TableColumn("Actions");
+        colClientName.setStyle("-fx-text-inner-color:red");
         Callback<TableColumn<Data, Void>, TableCell<Data, Void>> cellFactory = new Callback<TableColumn<Data, Void>, TableCell<Data, Void>>() {
+            @Override
+            public TableCell<Data, Void> call(final TableColumn<Data, Void> param) {
+                final TableCell<Data, Void> cell = new TableCell<Data, Void>() {
+
+                    private final com.gluonhq.charm.glisten.control.TextField clientName = new com.gluonhq.charm.glisten.control.TextField();
+
+                    {
+
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(clientName);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };
+
+        colClientName.setCellFactory(cellFactory);
+
+
+        table.getColumns().addAll(colName,colClientName,colExtension,colLastModified );
+        TableColumn<Data, Void> colBtn = new TableColumn("Actions");
+        cellFactory = new Callback<TableColumn<Data, Void>, TableCell<Data, Void>>() {
             @Override
             public TableCell<Data, Void> call(final TableColumn<Data, Void> param) {
                 final TableCell<Data, Void> cell = new TableCell<Data, Void>() {

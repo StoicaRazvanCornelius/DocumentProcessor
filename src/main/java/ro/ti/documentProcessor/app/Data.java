@@ -1,6 +1,8 @@
 package ro.ti.documentProcessor.app;
 
 
+import javafx.beans.property.SimpleStringProperty;
+
 import java.sql.Timestamp;
 
 public class Data {
@@ -10,11 +12,26 @@ public class Data {
     private String extension;
     private Timestamp lastModified;
 
+    public String getClientName() {
+        return clientName.get();
+    }
+
+    public SimpleStringProperty clientNameProperty() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName.set(clientName);
+    }
+
+    private SimpleStringProperty clientName;
+
     public Data(String name, String path, String extension, Timestamp lastModified){
         this.name= name;
         this.path= path;
         this.extension=extension;
         this.lastModified=lastModified;
+        this.clientName = new SimpleStringProperty();
     }
 
     public Data(Data data) {
@@ -60,5 +77,6 @@ public class Data {
     public String toString() {
         return "[Name:"+name + ", Path:"+ path+", Extension:"+extension +", LastModified:"+lastModified+"]";
     }
+
 
 }
