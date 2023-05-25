@@ -1,6 +1,7 @@
 package ro.ti.documentProcessor.MVC.Interfaces;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -14,5 +15,5 @@ public interface Controller {
     public void testMVC();
 
     public void testController();
-    void reloadFile(String path, String dateTimeUpdated);
+    void reloadFile(String path, Timestamp dateTimeUpdated);
 }

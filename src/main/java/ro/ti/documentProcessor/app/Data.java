@@ -17,6 +17,13 @@ public class Data {
         this.lastModified=lastModified;
     }
 
+    public Data(Data data) {
+        this.name= data.name;
+        this.path = data.getPath();
+        this.extension = data.extension;
+        this.lastModified = data.lastModified;
+    }
+
     public String getName() {
         return name;
     }

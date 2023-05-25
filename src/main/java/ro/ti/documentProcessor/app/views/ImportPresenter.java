@@ -32,6 +32,7 @@ import org.controlsfx.control.spreadsheet.SpreadsheetView;
 import ro.ti.documentProcessor.DocumentProcessorGluonApplication;
 import ro.ti.documentProcessor.app.Data;
 
+import javax.print.Doc;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -45,15 +46,9 @@ public class ImportPresenter {
 
     @FXML
     private Button pickFileBtn;
-    @FXML
-    private Button saveFileBtn;
 
     @FXML
     private TextArea pathText;
-
-    Button openExcelBtn;
-
-    Button cancelBtn;
 
     @FXML
     VBox dataPreviewBox;
@@ -67,6 +62,7 @@ public class ImportPresenter {
 
 
     public void initialize() {
+        DocumentProcessorGluonApplication.setImportPresenter(this);
         importView.setShowTransitionFactory(BounceInRightTransition::new);
         importView.showingProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
@@ -81,27 +77,20 @@ public class ImportPresenter {
 
         tvObservableList.addAll(
                 new Data("File a","gss",".xls",new Timestamp(System.currentTimeMillis())),
-                new Data("File b","gss",".xls",new Timestamp(System.currentTimeMillis())),
-                new Data("File c","gss",".xls",new Timestamp(System.currentTimeMillis())),
-                new Data("File d","gss",".xls",new Timestamp(System.currentTimeMillis())),
-                new Data("File e","gss",".xls",new Timestamp(System.currentTimeMillis()))
+                new Data("File b","gss",".xls",new Timestamp(System.currentTimeMillis()))
         );
 
 
         TableColumn<Data, String> colName = new TableColumn<>("Name");
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
-
         TableColumn<Data, String> colExtension = new TableColumn<>("Extension");
         colExtension.setCellValueFactory(new PropertyValueFactory<>("extension"));
-
         TableColumn<Data, Timestamp> colLastModified = new TableColumn<>("Last modified");
         colLastModified.setCellValueFactory(new PropertyValueFactory<>("lastModified"));
 
         table.getColumns().addAll(colName,colExtension,colLastModified );
 
         TableColumn<Data, Void> colBtn = new TableColumn("Actions");
-
-
         Callback<TableColumn<Data, Void>, TableCell<Data, Void>> cellFactory = new Callback<TableColumn<Data, Void>, TableCell<Data, Void>>() {
             @Override
             public TableCell<Data, Void> call(final TableColumn<Data, Void> param) {
@@ -117,22 +106,19 @@ public class ImportPresenter {
                         editBtn.setGraphic(MaterialDesignIcon.EDIT.graphic());
                         editBtn.setOnAction((ActionEvent event)->{
                                 Data data = getTableView().getItems().get(getIndex());
-                                System.out.println("Edit selectedData: " + data);
-
+                                DocumentProcessorGluonApplication.getController().openFile(data.getPath());
                         });
                         //save btn
                         Button saveBtn = new Button();
                         saveBtn.setGraphic(MaterialDesignIcon.SAVE.graphic());
                         saveBtn.setOnAction((ActionEvent event)->{
                             Data data = getTableView().getItems().get(getIndex());
-                            System.out.println("Save selectedData: " + data);
                         });
                         //erase btn
                         Button deleteBtn = new Button();
                         deleteBtn.setGraphic(MaterialDesignIcon.DELETE.graphic());
                         deleteBtn.setOnAction((ActionEvent event)->{
-                            Data data = getTableView().getItems().get(getIndex());
-                            System.out.println("Delete selectedData: " + data);
+                            tvObservableList.remove(getTableView().getItems().get(getIndex()));
                         });
                         btns.getChildren().addAll(editBtn,saveBtn,deleteBtn);
 
@@ -157,48 +143,42 @@ public class ImportPresenter {
         table.setItems(tvObservableList);
         fileBox.getChildren().add(table);
 
-        tvObservableList.add(new Data("FIle ccccc","sdd",".ttt",new Timestamp(System.currentTimeMillis())));
-        setTabs();
-        /*
-        openExcelBtn = new Button();
-        openExcelBtn.setText("Open in Excel");;
-        openExcelBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                openInExcel(event);
-            }
-        });
-        saveFileBtn = new Button();
-        saveFileBtn.setText("Save");;
-        openExcelBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                saveFile(event);
-            }
-        });
-        cancelBtn = new Button();
-        cancelBtn.setText("Cancel");;
-        cancelBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                cancel(event);
-            }
-        });
-
-         */
-    }
+        }
 
     public void pickFile(ActionEvent actionEvent) throws IOException {
         Node source = (Node) actionEvent.getSource();
         Window theStage = source.getScene().getWindow();
         FileChooser fileChooser= new FileChooser();
         fileChooser.setTitle("Import files");
+        FileChooser.ExtensionFilter xlsFilter =new FileChooser.ExtensionFilter("Old excel files (*.xls)", "*.xls");
+        FileChooser.ExtensionFilter xlsxFilter =new FileChooser.ExtensionFilter("Excel files (*.xlsx)", "*.xlsx");
+        FileChooser.ExtensionFilter rtfFilter =new FileChooser.ExtensionFilter("Rich Text Format files (*.rtf)", "*.rtf");
+        FileChooser.ExtensionFilter pdfFilter =new FileChooser.ExtensionFilter("Pdf files (*.pdf)", "*.pdf");
+        fileChooser.getExtensionFilters().add(xlsxFilter);
+        fileChooser.getExtensionFilters().add(xlsFilter);
+        fileChooser.getExtensionFilters().add(rtfFilter);
+        fileChooser.getExtensionFilters().add(pdfFilter);
         File file;
         if((file= fileChooser.showOpenDialog(theStage))!=null){
             this.pathText.setText(file.getAbsolutePath());
-
-
-
+            String extension = file.getName().substring(file.getName().indexOf('.')+1);
+            switch (extension){
+                case "xls":
+                case "xlsx":
+                    tvObservableList.add(new Data(file.getName().substring(0,file.getName().indexOf(".")),file.getAbsolutePath(),extension,new Timestamp(file.lastModified())));
+                    break;
+                case "rtf":
+                    pathText.setText("Working on the .rtf case");
+                    tvObservableList.add(new Data(file.getName().substring(0,file.getName().indexOf(".")),file.getAbsolutePath(),extension,new Timestamp(file.lastModified())));
+                    break;
+                case "pdf":
+                    tvObservableList.add(new Data(file.getName().substring(0,file.getName().indexOf(".")),file.getAbsolutePath(),extension,new Timestamp(file.lastModified())));
+                    pathText.setText("Working on the .pdf case");
+                    break;
+                default:
+                    pathText.setText("File type not supported");
+                    break;
+            }
             //DocumentProcessorGluonApplication.getController().readFromFile(file.getAbsolutePath());
 
             // Platform.runLater(() -> showExcelFileContent(fileFromController));
@@ -250,17 +230,17 @@ public class ImportPresenter {
 
     }
 
-    public void openInExcel(ActionEvent actionEvent) {
-        System.out.println("asdffff");
-        DocumentProcessorGluonApplication.getController().openFile(pathText.getText());
-    }
-    public void cancel(ActionEvent actionEvent) {
-    }
-
     public void saveAll(ActionEvent event){
-        System.out.println("Yeellow");
     }
 
+    public boolean reloadFile(String path, Timestamp time){
+        Data dataOld =tvObservableList.filtered(data -> data.getPath().equals(path)).get(0) ;
+        tvObservableList.remove(dataOld);
+        Data dataNew =new Data(dataOld);
+        dataNew.setLastModified(time);
+        tvObservableList.add(dataNew);
+        return true;
+    }
     /*
 
 

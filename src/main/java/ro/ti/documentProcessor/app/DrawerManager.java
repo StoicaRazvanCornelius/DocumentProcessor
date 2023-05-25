@@ -18,6 +18,7 @@ public class DrawerManager {
 
     public static void buildDrawer(AppManager app) {
         NavigationDrawer drawer = app.getDrawer();
+
         NavigationDrawer.Header header = new NavigationDrawer.Header("Document Processor",
                 "Views",
                 new Avatar(40, new Image(DrawerManager.class.getResourceAsStream("/draweBannerrIcon.png"))));
@@ -29,7 +30,7 @@ public class DrawerManager {
         final Item importItem = new ViewItem("Import", MaterialDesignIcon.FILE_DOWNLOAD.graphic(), IMPORT_VIEW,ViewStackPolicy.SKIP);
         final Item exportItem = new ViewItem("Export", MaterialDesignIcon.FILE_UPLOAD.graphic(), EXPORT_VIEW,ViewStackPolicy.SKIP);
         drawer.getItems().addAll(mainItem, settingsItem,scannerItem,importItem,exportItem);
-        
+
         if (Platform.isDesktop()) {
             final Item quitItem = new Item("Quit", MaterialDesignIcon.EXIT_TO_APP.graphic());
              quitItem.selectedProperty().addListener((obs, ov, nv) -> {

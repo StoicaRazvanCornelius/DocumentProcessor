@@ -3,7 +3,6 @@ package ro.ti.documentProcessor.MVC.controller;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.STRestartNumber;
 import ro.ti.documentProcessor.MVC.Interfaces.Controller;
 import ro.ti.documentProcessor.MVC.Interfaces.Model;
 import ro.ti.documentProcessor.MVC.Interfaces.View;
@@ -13,6 +12,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,10 +25,10 @@ public class XlsController implements Controller {
     public void openFile(String path)  {
         try {
             Desktop.getDesktop().open(new File(path));
+            FileChecker.checkForNewerVersion(this,path);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        FileChecker.checkForNewerVersion(this,path);
     }
 
     @Override
@@ -149,7 +149,8 @@ public class XlsController implements Controller {
     }
 
     @Override
-    public void reloadFile(String path, String format) {
+    public void reloadFile(String path, Timestamp time) {
+        view.updateFile(path,time);
         //string sss= model.processFile();
         //view.loadFile(sss);
     }

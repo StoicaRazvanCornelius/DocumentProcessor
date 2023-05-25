@@ -27,7 +27,7 @@ public class FileChecker {
                         Thread.sleep(1000);
                         if (timeStamp!= file.lastModified()){
                             //actions if file was modified here
-                            controller.reloadFile(path, format.format(new Date(file.lastModified())) );
+                            controller.reloadFile(path, new Timestamp(file.lastModified()) );
                             //("File modified at: " + format.format(new Date(file.lastModified())));
                             timeStamp=file.lastModified();
                         }

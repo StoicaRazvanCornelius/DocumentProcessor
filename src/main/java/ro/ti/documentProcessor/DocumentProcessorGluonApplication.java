@@ -19,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.sql.Timestamp;
 import java.util.Properties;
 
 import static com.gluonhq.charm.glisten.application.AppManager.HOME_VIEW;
@@ -28,6 +29,17 @@ public class DocumentProcessorGluonApplication extends Application implements ro
     public static final String SETTINGS_VIEW = "Settings View";
     public static final String IMPORT_VIEW = "Import View";
     public static final String EXPORT_VIEW = "Export View";
+    public static MainPresenter mainPresenter;
+    public static SettingsPresenter settingsPresenter;
+    public static ExportPresenter exportPresenterd;
+    public static ImportPresenter importPresenter;
+
+    public static void setImportPresenter(ImportPresenter importPresenterInstance){
+        importPresenter=importPresenterInstance;
+    }
+
+
+
     private AppManager appManager;
     private  MediaView mediaView;
     private  double volume = 100;
@@ -104,6 +116,11 @@ public class DocumentProcessorGluonApplication extends Application implements ro
         System.out.print("check\n");
         System.out.print("  From view:\n -controller: ");
         controller.testController();
+    }
+
+    @Override
+    public void updateFile(String path, Timestamp time) {
+        importPresenter.reloadFile(path,time);
     }
 
 
