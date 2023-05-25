@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -50,19 +51,16 @@ public class ImportPresenter {
     @FXML
     private TextArea pathText;
 
-    @FXML
-    HBox interactableButtons;
-
     Button openExcelBtn;
 
     Button cancelBtn;
 
     @FXML
-    VBox contentBox;
+    VBox dataPreviewBox;
     @FXML
     VBox fileBox;
 
-    volatile TabPane tabs;
+    TabPane tabs;
 
     private final TableView<Data> table = new TableView<>();
     private final ObservableList<Data> tvObservableList = FXCollections.observableArrayList();
@@ -81,21 +79,27 @@ public class ImportPresenter {
 
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
 
-        tvObservableList.addAll(new Data(1, "app1"),
-                new Data(2, "app2"),
-                new Data(3, "app3"),
-                new Data(4, "app4"),
-                new Data(5, "app5"));
+        tvObservableList.addAll(
+                new Data("File a","gss",".xls",new Timestamp(System.currentTimeMillis())),
+                new Data("File b","gss",".xls",new Timestamp(System.currentTimeMillis())),
+                new Data("File c","gss",".xls",new Timestamp(System.currentTimeMillis())),
+                new Data("File d","gss",".xls",new Timestamp(System.currentTimeMillis())),
+                new Data("File e","gss",".xls",new Timestamp(System.currentTimeMillis()))
+        );
 
-        TableColumn<Data, Integer> colId = new TableColumn<>("ID");
-        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
 
         TableColumn<Data, String> colName = new TableColumn<>("Name");
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-        table.getColumns().addAll(colId, colName);
+        TableColumn<Data, String> colExtension = new TableColumn<>("Extension");
+        colExtension.setCellValueFactory(new PropertyValueFactory<>("extension"));
 
-        TableColumn<Data, Void> colBtn = new TableColumn("Button Column");
+        TableColumn<Data, Timestamp> colLastModified = new TableColumn<>("Last modified");
+        colLastModified.setCellValueFactory(new PropertyValueFactory<>("lastModified"));
+
+        table.getColumns().addAll(colName,colExtension,colLastModified );
+
+        TableColumn<Data, Void> colBtn = new TableColumn("Actions");
 
 
         Callback<TableColumn<Data, Void>, TableCell<Data, Void>> cellFactory = new Callback<TableColumn<Data, Void>, TableCell<Data, Void>>() {
@@ -103,14 +107,35 @@ public class ImportPresenter {
             public TableCell<Data, Void> call(final TableColumn<Data, Void> param) {
                 final TableCell<Data, Void> cell = new TableCell<Data, Void>() {
 
-                    private final Button btn = new Button("Action");
+                    private final HBox btns = new HBox();
 
                     {
-                        btn.setGraphic(MaterialDesignIcon.EDIT.graphic());
-                        btn.setOnAction((ActionEvent event) -> {
-                            Data data = getTableView().getItems().get(getIndex());
-                            System.out.println("selectedData: " + data);
+                        btns.setSpacing(5);
+                        btns.setAlignment(Pos.CENTER_LEFT);
+                        //edit btn
+                        Button editBtn = new Button();
+                        editBtn.setGraphic(MaterialDesignIcon.EDIT.graphic());
+                        editBtn.setOnAction((ActionEvent event)->{
+                                Data data = getTableView().getItems().get(getIndex());
+                                System.out.println("Edit selectedData: " + data);
+
                         });
+                        //save btn
+                        Button saveBtn = new Button();
+                        saveBtn.setGraphic(MaterialDesignIcon.SAVE.graphic());
+                        saveBtn.setOnAction((ActionEvent event)->{
+                            Data data = getTableView().getItems().get(getIndex());
+                            System.out.println("Save selectedData: " + data);
+                        });
+                        //erase btn
+                        Button deleteBtn = new Button();
+                        deleteBtn.setGraphic(MaterialDesignIcon.DELETE.graphic());
+                        deleteBtn.setOnAction((ActionEvent event)->{
+                            Data data = getTableView().getItems().get(getIndex());
+                            System.out.println("Delete selectedData: " + data);
+                        });
+                        btns.getChildren().addAll(editBtn,saveBtn,deleteBtn);
+
                     }
 
                     @Override
@@ -119,7 +144,7 @@ public class ImportPresenter {
                         if (empty) {
                             setGraphic(null);
                         } else {
-                            setGraphic(btn);
+                            setGraphic(btns);
                         }
                     }
                 };
@@ -132,6 +157,8 @@ public class ImportPresenter {
         table.setItems(tvObservableList);
         fileBox.getChildren().add(table);
 
+        tvObservableList.add(new Data("FIle ccccc","sdd",".ttt",new Timestamp(System.currentTimeMillis())));
+        setTabs();
         /*
         openExcelBtn = new Button();
         openExcelBtn.setText("Open in Excel");;
@@ -171,21 +198,116 @@ public class ImportPresenter {
             this.pathText.setText(file.getAbsolutePath());
 
 
-            //changeInterfaceFilePicked();
 
-            //showExcelFileContent(new HashMap<>());
             //DocumentProcessorGluonApplication.getController().readFromFile(file.getAbsolutePath());
-            //HashMap<String, ArrayList<String>> fileFromController = new HashMap<>();
 
-
-            //showExcelFileContent(fileFromController);
-           // Platform.runLater(() -> showExcelFileContent(fileFromController));
+            // Platform.runLater(() -> showExcelFileContent(fileFromController));
         }
 
 
     }
 
-    private void showExcelFileContent(HashMap<String, ArrayList<String>> file) {
+
+    private void setTabs() {
+        int rowCount = 100;
+        int columnCount = 100 ;
+        GridBase grid = new GridBase(rowCount, columnCount);
+        ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
+        for (int row = 0; row < grid.getRowCount(); ++row) {
+            final ObservableList<SpreadsheetCell> list = FXCollections.observableArrayList();
+            for (int column = 0; column < grid.getColumnCount(); ++column) {
+                list.add(SpreadsheetCellType.STRING.createCell(row, column, 1, 1,"value"));
+            }
+            rows.add(list);
+        }
+        grid.setRows(rows);
+
+        SpreadsheetView spv = new SpreadsheetView(grid);
+        ScrollPane page = new ScrollPane();
+        page.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        page.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        page.setPrefWidth(Region.USE_COMPUTED_SIZE);
+        page.setMaxHeight(Region.USE_COMPUTED_SIZE);
+        page.setMaxWidth(Region.USE_COMPUTED_SIZE);
+        page.setContent(spv);
+        tabs= new TabPane();
+        tabs.getTabs().add(new Tab("pageName",spv));
+        dataPreviewBox.getChildren().add(tabs);
+
+    }
+
+    public void clickSound(MouseEvent mouseEvent) {
+    }
+
+    public void saveFile(ActionEvent actionEvent)
+    {
+        System.out.println("sddddddddd");
+        DocumentProcessorGluonApplication.getController().openFile(pathText.getText());
+        DocumentProcessorGluonApplication.getController().testController();
+        // directory save
+        // DirectoryChooser directoryChooser = new DirectoryChooser();
+        // directoryChooser.setTitle("Save in");
+
+    }
+
+    public void openInExcel(ActionEvent actionEvent) {
+        System.out.println("asdffff");
+        DocumentProcessorGluonApplication.getController().openFile(pathText.getText());
+    }
+    public void cancel(ActionEvent actionEvent) {
+    }
+
+    public void saveAll(ActionEvent event){
+        System.out.println("Yeellow");
+    }
+
+    /*
+
+
+
+            /*
+            TableView<RowData> tableView = new TableView<>();
+            tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+
+
+            ArrayList<String> columnNames = file.get(pageName+"Columns");
+            TableColumn<RowData, String>[] columns = new TableColumn[columnNames.size()];
+
+
+            // Create and configure the columns
+            for (int i = 0; i < columnNames.size(); i++) {
+                final int columnIndex = i;
+                TableColumn<RowData, String> column = new TableColumn<>(columnNames.get(columnIndex));
+                column.setCellValueFactory(cellData -> cellData.getValue().getCells().get(columnIndex).getValue());
+                column.setCellFactory(TextFieldTableCell.forTableColumn());
+                columns[i] = column;
+            }
+
+
+            ObservableList<RowData> data=FXCollections.observableArrayList();
+
+            ArrayList<String> rowIndexes = file.get(pageName+"Indexes");
+            ArrayList<RowData> s = new ArrayList<>();
+
+            for (String index:
+                    rowIndexes) {
+                ArrayList<String> rowDataList = file.get(pageName+index);
+
+                //data.add(new RowData(rowDataList));
+               /*Thread rowThread = new Thread(new Runnable() {
+                   @Override
+                   public void run() {
+                   }
+               });
+               rowThread.start();
+            }
+
+
+            tableView.setItems(data);
+            tableView.getColumns().addAll(columns);
+
+
+      private void showExcelFileContent(HashMap<String, ArrayList<String>> file) {
 
 
         //Original
@@ -228,153 +350,8 @@ public class ImportPresenter {
 
     }
 
-    private void setTabs(HashMap<String,ArrayList<String>> file, ArrayList<String> pagesName) {
-        for (String pageName:
-             pagesName) {
-            int rowCount = 110;
-            int columnCount = 180;
-            GridBase grid = new GridBase(rowCount, columnCount);
-
-            ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
-            for (int row = 0; row < grid.getRowCount(); ++row) {
-                final ObservableList<SpreadsheetCell> list = FXCollections.observableArrayList();
-                for (int column = 0; column < grid.getColumnCount(); ++column) {
-                    list.add(SpreadsheetCellType.STRING.createCell(row, column, 1, 1,"value"));
-                }
-                rows.add(list);
-            }
-            grid.setRows(rows);
-
-            SpreadsheetView spv = new SpreadsheetView(grid);
-
-            /*
-            TableView<RowData> tableView = new TableView<>();
-            tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
-
-
-            ArrayList<String> columnNames = file.get(pageName+"Columns");
-            TableColumn<RowData, String>[] columns = new TableColumn[columnNames.size()];
-
-
-            // Create and configure the columns
-            for (int i = 0; i < columnNames.size(); i++) {
-                final int columnIndex = i;
-                TableColumn<RowData, String> column = new TableColumn<>(columnNames.get(columnIndex));
-                column.setCellValueFactory(cellData -> cellData.getValue().getCells().get(columnIndex).getValue());
-                column.setCellFactory(TextFieldTableCell.forTableColumn());
-                columns[i] = column;
-            }
-
-
-            ObservableList<RowData> data=FXCollections.observableArrayList();
-
-            ArrayList<String> rowIndexes = file.get(pageName+"Indexes");
-            ArrayList<RowData> s = new ArrayList<>();
-
-            for (String index:
-                    rowIndexes) {
-                ArrayList<String> rowDataList = file.get(pageName+index);
-
-                //data.add(new RowData(rowDataList));
-               /*Thread rowThread = new Thread(new Runnable() {
-                   @Override
-                   public void run() {
-                   }
-               });
-               rowThread.start();
-            }
-
-
-            tableView.setItems(data);
-            tableView.getColumns().addAll(columns);
-            */
-            ScrollPane page = new ScrollPane();
-            page.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-            page.setPrefHeight(Region.USE_COMPUTED_SIZE);
-            page.setPrefWidth(Region.USE_COMPUTED_SIZE);
-            page.setMaxHeight(Region.USE_COMPUTED_SIZE);
-            page.setMaxWidth(Region.USE_COMPUTED_SIZE);
-
-            page.setContent(spv);
-            tabs.getTabs().add(new Tab(pageName,page));
-            //ScrollPane s = new ScrollPane();
-            //Tab tab = copyTab(null, page,tableView);
-            //s.setContent(tableView);
-
-            System.out.println(new Timestamp(System.currentTimeMillis()));
-            //tabs.getTabs().add(tab);
-            // tabs.getTabs().add(tab);
-            // tabs.getTabs().add(tab);
-            //  tabs.getTabs().add(tab);
-            //  tabs.getTabs().add(tab);
-            //  tabs.getTabs().add(tab);
-
-            System.out.println(new Timestamp(System.currentTimeMillis()));
-
-
-        }
-    }
-
-    private void changeInterfaceFilePicked() {
-        interactableButtons.getChildren().add(openExcelBtn);
-        interactableButtons.getChildren().add(saveFileBtn);
-        interactableButtons.getChildren().add(cancelBtn);
-    }
-
-    public void clickSound(MouseEvent mouseEvent) {
-    }
-
-    public void saveFile(ActionEvent actionEvent)
-    {
-        System.out.println("sddddddddd");
-        DocumentProcessorGluonApplication.getController().openFile(pathText.getText());
-        DocumentProcessorGluonApplication.getController().testController();
-        // directory save
-        // DirectoryChooser directoryChooser = new DirectoryChooser();
-        // directoryChooser.setTitle("Save in");
-
-    }
-
-    public void openInExcel(ActionEvent actionEvent) {
-        System.out.println("asdffff");
-        DocumentProcessorGluonApplication.getController().openFile(pathText.getText());
-    }
-    public void cancel(ActionEvent actionEvent) {
-        contentBox.setVisible(false);
-        interactableButtons.getChildren().remove(1,interactableButtons.getChildren().size());
-    }
-
-    public void setMainRefrence(DocumentProcessorGluonApplication documentProcessorGluonApplication) {
-        documentProcessorGluonApplication.getController().testController();
-    }
-
-    public Tab copyTab(Tab tab,ScrollPane page,TableView tableView){
-        ScrollPane pageNew = new ScrollPane();
-        page.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        page.setPrefHeight(Region.USE_COMPUTED_SIZE);
-        page.setPrefWidth(Region.USE_COMPUTED_SIZE);
-        page.setMaxHeight(Region.USE_COMPUTED_SIZE);
-        page.setMaxWidth(Region.USE_COMPUTED_SIZE);
-
-        TableView<Data> tableViewNew = new TableView<>();
-        tableViewNew.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
-        // Create and configure the columns
-        for (int i = 0; i < tableView.getColumns().size(); i++) {
-            TableColumn<Data, String> column = (TableColumn<Data, String>) tableView.getColumns().get(i);
-        }
-
-        page.setContent(tableView);
-        return new Tab("22",pageNew);
-
-    }
-
-
     public void sss(HashMap<String,ArrayList<String>> file){
-
-
-
-
-        //Make file
+      //Make file
         ArrayList<String> pagesName= new ArrayList<>();
         pagesName.add("0");
         pagesName.add("1");
@@ -409,4 +386,7 @@ public class ImportPresenter {
 
         }
     }
+
+    * */
+
 }
