@@ -5,6 +5,7 @@ import com.gluonhq.charm.glisten.application.AppManager;
 import com.gluonhq.charm.glisten.control.AppBar;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -97,11 +98,17 @@ public class ImportPresenter {
             @Override
             public TableCell<Data, Void> call(final TableColumn<Data, Void> param) {
                 final TableCell<Data, Void> cell = new TableCell<Data, Void>() {
-
                     private final com.gluonhq.charm.glisten.control.TextField clientName = new com.gluonhq.charm.glisten.control.TextField();
 
                     {
-
+                        clientName.textProperty().addListener(new ChangeListener<String>() {
+                            @Override
+                            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                                Data data = getTableView().getItems().get(getIndex());
+                                data.setClientName(newValue);
+                                System.out.println(newValue);
+                            }
+                        });
                     }
                     @Override
                     public void updateItem(Void item, boolean empty) {
@@ -272,6 +279,7 @@ public class ImportPresenter {
         tvObservableList.add(dataNew);
         return true;
     }
+
     /*
 
 

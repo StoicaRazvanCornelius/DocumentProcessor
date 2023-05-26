@@ -2,6 +2,7 @@ package ro.ti.documentProcessor;
 
 import ro.ti.documentProcessor.MVC.Interfaces.*;
 import ro.ti.documentProcessor.MVC.controller.XlsController;
+import ro.ti.documentProcessor.MVC.model.ModelXlsProcessor;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,8 +33,6 @@ public class Main {
 
         controller= new XlsController();
         controller.setProperties(properties);
-        controller.pingDatabase();
-        /*
         model = new ModelXlsProcessor();
         DocumentProcessorGluonApplication.setProperties(properties);
         View view = new DocumentProcessorGluonApplication();
@@ -42,7 +41,6 @@ public class Main {
         model.setController(controller);
         view.setController(controller);
         ((DocumentProcessorGluonApplication) view).main(new String[]{"E:/JAVAFX/openjfx-20_windows-x64_bin-sdk/javafx-sdk-20/lib"});
-        */
     }
 
 }
