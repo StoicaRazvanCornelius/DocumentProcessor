@@ -16,4 +16,6 @@ public abstract interface Controller {
     public void testMVC();
     public void testController();
     void reloadFile(String path, Timestamp dateTimeUpdated);
+
+    void pingDatabase();
 }

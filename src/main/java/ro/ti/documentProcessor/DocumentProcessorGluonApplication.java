@@ -52,7 +52,7 @@ public class DocumentProcessorGluonApplication extends Application implements ro
         properties = appProperties;
     }
 
-    private static Properties properties;
+    public static Properties properties;
     private static volatile Controller controller;
     @Override
     public void init() throws URISyntaxException {

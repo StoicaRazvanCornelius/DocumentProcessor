@@ -12,13 +12,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.*;
 import java.util.List;
 
 public class XlsController implements Controller {
     Model model;
     View view;
+
+    Database database;
 
     Properties properties;
     public void openFile(String path)  {
@@ -133,6 +135,7 @@ public class XlsController implements Controller {
     @Override
     public void setProperties(Properties properties) {
         this.properties=properties;
+        database = new Database(properties);
     }
 
     @Override
@@ -155,6 +158,11 @@ public class XlsController implements Controller {
         view.updateFile(path,time);
         //string sss= model.processFile();
         //view.loadFile(sss);
+    }
+
+    @Override
+    public void pingDatabase() {
+        database.checkifConnectionIsValid();
     }
 
 
