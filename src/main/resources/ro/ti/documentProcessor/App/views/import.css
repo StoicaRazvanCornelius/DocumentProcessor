@@ -1,13 +1,6 @@
 
-.helv-b-24{
-    -fx-font-family: "Helvetica neue bold","",SansSerif;
-    -fx-font-size: 24px !important;
-}
 .view {
-}
-.table-cell{
-
-}
-.tabPane{
-    -fx-background-color: #22FF!important;
+    -fx-font-family: "Helvetica neue regular",SansSerif;
+    -fx-font-size: 12px;
+    -fx-font-weight: 400;
 }

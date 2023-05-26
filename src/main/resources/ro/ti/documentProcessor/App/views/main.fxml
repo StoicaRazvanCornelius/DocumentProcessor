@@ -6,8 +6,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-
-<View fx:id="main" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="350.0" stylesheets="@main.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ro.ti.documentProcessor.app.views.MainPresenter">
+<?import java.net.URL?>
+<View fx:id="main" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ro.ti.documentProcessor.app.views.MainPresenter">
    <center>
       <VBox alignment="CENTER" prefHeight="538.0" prefWidth="617.0" spacing="15.0" BorderPane.alignment="CENTER">
          <children>
@@ -21,4 +21,8 @@
          </children>
       </VBox>
    </center>
+   <stylesheets>
+      <URL value="@main.css" />
+      <URL value="@../../fontstyle.css" />
+   </stylesheets>
 </View>

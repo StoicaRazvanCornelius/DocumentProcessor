@@ -13,15 +13,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class XlsController implements Controller {
     Model model;
-    static View view;
+    View view;
 
+    Properties properties;
     public void openFile(String path)  {
         try {
             Desktop.getDesktop().open(new File(path));
@@ -125,12 +124,15 @@ public class XlsController implements Controller {
     public void setView(View view) {
         this.view=view;
     }
-    public static void setStaticallyView(View staticallyView) {
-        view=staticallyView;
-    }
+
     @Override
     public void setModel(Model model) {
         this.model=model;
+    }
+
+    @Override
+    public void setProperties(Properties properties) {
+        this.properties=properties;
     }
 
     @Override

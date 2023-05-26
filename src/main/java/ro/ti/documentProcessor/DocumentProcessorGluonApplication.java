@@ -43,7 +43,16 @@ public class DocumentProcessorGluonApplication extends Application implements ro
     private AppManager appManager;
     private  MediaView mediaView;
     private  double volume = 100;
-    private Properties properties;
+
+    public Properties getProperties() {
+        return properties;
+    }
+
+    public static void setProperties(Properties appProperties) {
+        properties = appProperties;
+    }
+
+    private static Properties properties;
     private static volatile Controller controller;
     @Override
     public void init() throws URISyntaxException {
@@ -83,19 +92,6 @@ public class DocumentProcessorGluonApplication extends Application implements ro
     }
 
     private void postInit(Scene scene) {
-
-        //properties file. Settings remain the same even if you close the app.
-        try {
-            //String configPropertiesPath = DocumentProcessorGluonApplication.class.getResource("config.properties").getPath();
-            String configPropertiesPath = DocumentProcessorGluonApplication.class.getResource("config.properties").getPath();
-            FileInputStream propsInput = new FileInputStream(configPropertiesPath);
-            properties = new Properties();
-            properties.load(propsInput);
-        }catch (FileNotFoundException e){
-            //run default interaface and create new config file
-        } catch (IOException e) {
-            //throw new RuntimeException(e);
-        }
 
         //using the config file
         Swatch.valueOf(properties.getProperty("swatch")).assignTo(scene);

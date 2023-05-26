@@ -84,6 +84,7 @@ public class ImportPresenter {
 
         TableColumn<Data, String> colName = new TableColumn<>("Name");
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        colName.setStyle("-fx-font-family:\"Helvetica neue regular\"");
         TableColumn<Data, String> colExtension = new TableColumn<>("Extension");
         colExtension.setCellValueFactory(new PropertyValueFactory<>("extension"));
         TableColumn<Data, Timestamp> colLastModified = new TableColumn<>("Last modified");
@@ -102,7 +103,6 @@ public class ImportPresenter {
                     {
 
                     }
-
                     @Override
                     public void updateItem(Void item, boolean empty) {
                         super.updateItem(item, empty);

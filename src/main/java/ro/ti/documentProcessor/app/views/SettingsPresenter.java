@@ -46,7 +46,7 @@ public class SettingsPresenter {
     }
 
     public void clickSound() throws URISyntaxException {
-        clickSound();
+        //clickSound();
     }
 
 

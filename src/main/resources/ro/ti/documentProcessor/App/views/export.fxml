@@ -5,11 +5,16 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<View fx:id="exportView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="350.0" stylesheets="@main.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ro.ti.documentProcessor.app.views.ExportPresenter">
+<?import java.net.URL?>
+<View fx:id="exportView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ro.ti.documentProcessor.app.views.ExportPresenter">
    <center>
       <VBox alignment="CENTER" prefHeight="538.0" prefWidth="617.0" spacing="15.0" BorderPane.alignment="CENTER">
          <children>
             <Label text="sdjhkdfjkhsdfsdf" textFill="RED" />
          </children></VBox>
    </center>
+   <stylesheets>
+      <URL value="@export.css" />
+      <URL value="@../../fontstyle.css" />
+   </stylesheets>
 </View>
