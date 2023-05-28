@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import ro.ti.documentProcessor.MVC.Interfaces.Controller;
+import ro.ti.documentProcessor.MVC.Interfaces.ControllerFile;
 import ro.ti.documentProcessor.MVC.Interfaces.View;
 import ro.ti.documentProcessor.app.DrawerManager;
 import ro.ti.documentProcessor.app.views.*;

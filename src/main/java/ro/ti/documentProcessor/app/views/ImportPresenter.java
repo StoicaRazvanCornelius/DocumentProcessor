@@ -106,7 +106,6 @@ public class ImportPresenter {
                             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                                 Data data = getTableView().getItems().get(getIndex());
                                 data.setClientName(newValue);
-                                System.out.println(newValue);
                             }
                         });
                     }
@@ -150,7 +149,10 @@ public class ImportPresenter {
                         Button saveBtn = new Button();
                         saveBtn.setGraphic(MaterialDesignIcon.SAVE.graphic());
                         saveBtn.setOnAction((ActionEvent event)->{
+                            //process save
                             Data data = getTableView().getItems().get(getIndex());
+                            // erase it from current list
+                            tvObservableList.remove(getTableView().getItems().get(getIndex()));
                         });
                         //erase btn
                         Button deleteBtn = new Button();
@@ -257,18 +259,11 @@ public class ImportPresenter {
     public void clickSound(MouseEvent mouseEvent) {
     }
 
-    public void saveFile(ActionEvent actionEvent)
-    {
-        System.out.println("sddddddddd");
-        DocumentProcessorGluonApplication.getController().openFile(pathText.getText());
-        DocumentProcessorGluonApplication.getController().testController();
-        // directory save
-        // DirectoryChooser directoryChooser = new DirectoryChooser();
-        // directoryChooser.setTitle("Save in");
-
-    }
-
     public void saveAll(ActionEvent event){
+        for (Data data:
+                tvObservableList) {
+            System.out.println(data.toString());
+        }
     }
 
     public boolean reloadFile(String path, Timestamp time){

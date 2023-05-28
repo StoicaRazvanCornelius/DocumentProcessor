@@ -1,4 +1,4 @@
-package ro.ti.documentProcessor.MVC.controller;
+package ro.ti.documentProcessor.MVC.controller.utils;
 
 import ro.ti.documentProcessor.MVC.Interfaces.Controller;
 

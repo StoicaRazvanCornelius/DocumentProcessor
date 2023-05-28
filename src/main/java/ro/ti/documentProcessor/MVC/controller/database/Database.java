@@ -1,4 +1,4 @@
-package ro.ti.documentProcessor.MVC.controller;
+package ro.ti.documentProcessor.MVC.controller.database;
 
 import java.sql.*;
 import java.util.Properties;

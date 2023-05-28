@@ -31,7 +31,7 @@ public class Main {
             //throw new RuntimeException(e);
         }
 
-        controller= new XlsController();
+        controller=  new ro.ti.documentProcessor.MVC.controller.Controller();
         controller.setProperties(properties);
         model = new ModelXlsProcessor();
         DocumentProcessorGluonApplication.setProperties(properties);
