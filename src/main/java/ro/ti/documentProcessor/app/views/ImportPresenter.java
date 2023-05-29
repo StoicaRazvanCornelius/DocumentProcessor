@@ -279,7 +279,7 @@ public class ImportPresenter {
             scrllablePage.setContent(spv);
             tabs.getTabs().add(new Tab(page,spv));
         }
-        if (dataPreviewBox.getChildren().get(1) == null) dataPreviewBox.getChildren().add(tabs);
+        if (dataPreviewBox.getChildren().size()<2) dataPreviewBox.getChildren().add(tabs);
         else {
             dataPreviewBox.getChildren().remove(1);
             dataPreviewBox.getChildren().add(tabs);
