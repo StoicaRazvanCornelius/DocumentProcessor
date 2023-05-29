@@ -1,19 +1,20 @@
-package ro.ti.documentProcessor.MVC.controller;
+package ro.ti.documentProcessor.MVC.controller.file;
 
-import ro.ti.documentProcessor.MVC.Interfaces.Controller;
 import ro.ti.documentProcessor.MVC.Interfaces.ControllerFile;
-import ro.ti.documentProcessor.MVC.Interfaces.Model;
-import ro.ti.documentProcessor.MVC.Interfaces.View;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Properties;
 
 public class PdfController implements ControllerFile {
+    private static volatile PdfController instance;
 
+    private PdfController(){
 
+    }
+
+    public static PdfController getInstance(){
+        return instance != null ? instance :(instance = new PdfController());
+    }
     @Override
     public HashMap readFromFile(String path) throws IOException {
         return null;

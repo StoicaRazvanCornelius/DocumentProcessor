@@ -1,18 +1,21 @@
-package ro.ti.documentProcessor.MVC.controller;
+package ro.ti.documentProcessor.MVC.controller.file;
 
-import ro.ti.documentProcessor.MVC.Interfaces.Controller;
 import ro.ti.documentProcessor.MVC.Interfaces.ControllerFile;
-import ro.ti.documentProcessor.MVC.Interfaces.Model;
-import ro.ti.documentProcessor.MVC.Interfaces.View;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Properties;
 
 public class RtfController implements ControllerFile {
 
+    private static volatile RtfController instance;
+    private RtfController(){
+
+    }
+
+    public static  RtfController getInstance(){
+        return instance != null ? instance : (instance= new RtfController());
+    }
     @Override
     public HashMap<String, ArrayList<String>> readFromFile(String path) throws IOException {
         return null;

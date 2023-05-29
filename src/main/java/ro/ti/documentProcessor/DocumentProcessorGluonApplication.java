@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.Properties;
 
 import static com.gluonhq.charm.glisten.application.AppManager.HOME_VIEW;
@@ -52,6 +53,8 @@ public class DocumentProcessorGluonApplication extends Application implements ro
     public static void setProperties(Properties appProperties) {
         properties = appProperties;
     }
+
+
 
     public static Properties properties;
     private static volatile Controller controller;
@@ -116,9 +119,10 @@ public class DocumentProcessorGluonApplication extends Application implements ro
     }
 
     @Override
-    public void updateFile(String path, Timestamp time) {
+    public void reloadFile(String path, Timestamp time) {
         importPresenter.reloadFile(path,time);
     }
+
 
 
     public static Controller getController() {

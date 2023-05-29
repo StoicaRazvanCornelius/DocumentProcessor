@@ -1,7 +1,7 @@
 package ro.ti.documentProcessor;
 
 import ro.ti.documentProcessor.MVC.Interfaces.*;
-import ro.ti.documentProcessor.MVC.controller.XlsController;
+import ro.ti.documentProcessor.MVC.controller.rest.Endpoint;
 import ro.ti.documentProcessor.MVC.model.ModelXlsProcessor;
 
 import java.io.FileInputStream;
@@ -18,6 +18,7 @@ public class Main {
 
 
     public static void main(String[] args) {
+
         //properties file. Settings remain the same even if you close the app.
         try {
             //String configPropertiesPath = DocumentProcessorGluonApplication.class.getResource("config.properties").getPath();
@@ -33,6 +34,8 @@ public class Main {
 
         controller=  new ro.ti.documentProcessor.MVC.controller.Controller();
         controller.setProperties(properties);
+
+
         model = new ModelXlsProcessor();
         DocumentProcessorGluonApplication.setProperties(properties);
         View view = new DocumentProcessorGluonApplication();
@@ -41,6 +44,7 @@ public class Main {
         model.setController(controller);
         view.setController(controller);
         ((DocumentProcessorGluonApplication) view).main(new String[]{"E:/JAVAFX/openjfx-20_windows-x64_bin-sdk/javafx-sdk-20/lib"});
+
     }
 
 }

@@ -5,21 +5,21 @@ import com.gluonhq.charm.glisten.application.AppManager;
 import com.gluonhq.charm.glisten.control.AppBar;
 import com.gluonhq.charm.glisten.mvc.View;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -34,7 +34,6 @@ import org.controlsfx.control.spreadsheet.SpreadsheetView;
 import ro.ti.documentProcessor.DocumentProcessorGluonApplication;
 import ro.ti.documentProcessor.app.Data;
 
-import javax.print.Doc;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -64,6 +63,7 @@ public class ImportPresenter {
 
 
     public void initialize() {
+        System.gc();
         DocumentProcessorGluonApplication.setImportPresenter(this);
         importView.setShowTransitionFactory(BounceInRightTransition::new);
         importView.showingProperty().addListener((obs, oldValue, newValue) -> {
@@ -77,9 +77,16 @@ public class ImportPresenter {
 
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
 
+        table.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+            System.gc();
+            Data data = tvObservableList.get(newValue.intValue());
+            HashMap file =  DocumentProcessorGluonApplication.getController().readFromFile(data.getPath(),data.getExtension());
+            Platform.runLater(() -> setTabs(file,data.getExtension()));
+        });
+
         tvObservableList.addAll(
-                new Data("File a","gss",".xls",new Timestamp(System.currentTimeMillis())),
-                new Data("File b","gss",".xls",new Timestamp(System.currentTimeMillis()))
+                new Data("File a","./File a","xls",new Timestamp(System.currentTimeMillis())),
+                new Data("File b","./gss","xlsx",new Timestamp(System.currentTimeMillis()))
         );
 
 
@@ -91,6 +98,7 @@ public class ImportPresenter {
         TableColumn<Data, Timestamp> colLastModified = new TableColumn<>("Last modified");
         colLastModified.setCellValueFactory(new PropertyValueFactory<>("lastModified"));
         TableColumn<Data, Void> colClientName = new TableColumn<>("Client Name");
+
 
 
         colClientName.setStyle("-fx-text-inner-color:red");
@@ -122,10 +130,7 @@ public class ImportPresenter {
                 return cell;
             }
         };
-
         colClientName.setCellFactory(cellFactory);
-
-
         table.getColumns().addAll(colName,colClientName,colExtension,colLastModified );
         TableColumn<Data, Void> colBtn = new TableColumn("Actions");
         cellFactory = new Callback<TableColumn<Data, Void>, TableCell<Data, Void>>() {
@@ -158,6 +163,7 @@ public class ImportPresenter {
                         Button deleteBtn = new Button();
                         deleteBtn.setGraphic(MaterialDesignIcon.DELETE.graphic());
                         deleteBtn.setOnAction((ActionEvent event)->{
+                            tabs = null;
                             tvObservableList.remove(getTableView().getItems().get(getIndex()));
                         });
                         btns.getChildren().addAll(editBtn,saveBtn,deleteBtn);
@@ -199,6 +205,7 @@ public class ImportPresenter {
         fileChooser.getExtensionFilters().add(rtfFilter);
         fileChooser.getExtensionFilters().add(pdfFilter);
         File file;
+
         if((file= fileChooser.showOpenDialog(theStage))!=null){
             this.pathText.setText(file.getAbsolutePath());
             String extension = file.getName().substring(file.getName().indexOf('.')+1);
@@ -219,41 +226,64 @@ public class ImportPresenter {
                     pathText.setText("File type not supported");
                     break;
             }
-            //DocumentProcessorGluonApplication.getController().readFromFile(file.getAbsolutePath());
-
-            // Platform.runLater(() -> showExcelFileContent(fileFromController));
         }
 
 
     }
 
 
-    private void setTabs() {
-        int rowCount = 100;
-        int columnCount = 100 ;
-        GridBase grid = new GridBase(rowCount, columnCount);
-        ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
-        for (int row = 0; row < grid.getRowCount(); ++row) {
-            final ObservableList<SpreadsheetCell> list = FXCollections.observableArrayList();
-            for (int column = 0; column < grid.getColumnCount(); ++column) {
-                list.add(SpreadsheetCellType.STRING.createCell(row, column, 1, 1,"value"));
-            }
-            rows.add(list);
+    private void setTabs(HashMap<String,ArrayList<String>> file, String extension) {
+        switch (extension)
+        {
+            case "xls":
+            case "xlsx":
+                setXlsTabs(file);
+                break;
+            case "rtf":
+                break;
+            case "pdf":
+                break;
+            default:
+                return;
+
         }
-        grid.setRows(rows);
 
-        SpreadsheetView spv = new SpreadsheetView(grid);
-        ScrollPane page = new ScrollPane();
-        page.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        page.setPrefHeight(Region.USE_COMPUTED_SIZE);
-        page.setPrefWidth(Region.USE_COMPUTED_SIZE);
-        page.setMaxHeight(Region.USE_COMPUTED_SIZE);
-        page.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        page.setContent(spv);
+    }
+
+    private void setXlsTabs(HashMap<String, ArrayList<String>> file) {
         tabs= new TabPane();
-        tabs.getTabs().add(new Tab("pageName",spv));
-        dataPreviewBox.getChildren().add(tabs);
+        ArrayList<String> pages  = file.get("Pages");
+        for (String page:
+                pages) {
+            int rowCount = file.get(page+"Indexes").size();
+            int columnCount = file.get(page+"Columns").size();
+            GridBase grid = new GridBase(rowCount, columnCount);
+            ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
+            for (int row = 0; row < grid.getRowCount(); ++row) {
+                final ObservableList<SpreadsheetCell> list = FXCollections.observableArrayList();
+                for (int column = 0; column < grid.getColumnCount(); ++column) {
+                    ArrayList<String> line  = file.get(page+row);
+                    list.add(SpreadsheetCellType.STRING.createCell(row, column, 1, 1,file.get(page+row).get(column)));
+                }
+                rows.add(list);
+            }
+            grid.setRows(rows);
 
+            SpreadsheetView spv = new SpreadsheetView(grid);
+            ScrollPane scrllablePage = new ScrollPane();
+            scrllablePage.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+            scrllablePage.setPrefHeight(Region.USE_COMPUTED_SIZE);
+            scrllablePage.setPrefWidth(Region.USE_COMPUTED_SIZE);
+            scrllablePage.setMaxHeight(Region.USE_COMPUTED_SIZE);
+            scrllablePage.setMaxWidth(Region.USE_COMPUTED_SIZE);
+            scrllablePage.setContent(spv);
+            tabs.getTabs().add(new Tab(page,spv));
+        }
+        if (dataPreviewBox.getChildren().get(1) == null) dataPreviewBox.getChildren().add(tabs);
+        else {
+            dataPreviewBox.getChildren().remove(1);
+            dataPreviewBox.getChildren().add(tabs);
+        }
     }
 
     public void clickSound(MouseEvent mouseEvent) {
@@ -266,141 +296,12 @@ public class ImportPresenter {
         }
     }
 
-    public boolean reloadFile(String path, Timestamp time){
+    public void reloadFile(String path, Timestamp time){
+        tabs =  null;
         Data dataOld =tvObservableList.filtered(data -> data.getPath().equals(path)).get(0) ;
         tvObservableList.remove(dataOld);
         Data dataNew =new Data(dataOld);
         dataNew.setLastModified(time);
         tvObservableList.add(dataNew);
-        return true;
     }
-
-    /*
-
-
-
-            /*
-            TableView<RowData> tableView = new TableView<>();
-            tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
-
-
-            ArrayList<String> columnNames = file.get(pageName+"Columns");
-            TableColumn<RowData, String>[] columns = new TableColumn[columnNames.size()];
-
-
-            // Create and configure the columns
-            for (int i = 0; i < columnNames.size(); i++) {
-                final int columnIndex = i;
-                TableColumn<RowData, String> column = new TableColumn<>(columnNames.get(columnIndex));
-                column.setCellValueFactory(cellData -> cellData.getValue().getCells().get(columnIndex).getValue());
-                column.setCellFactory(TextFieldTableCell.forTableColumn());
-                columns[i] = column;
-            }
-
-
-            ObservableList<RowData> data=FXCollections.observableArrayList();
-
-            ArrayList<String> rowIndexes = file.get(pageName+"Indexes");
-            ArrayList<RowData> s = new ArrayList<>();
-
-            for (String index:
-                    rowIndexes) {
-                ArrayList<String> rowDataList = file.get(pageName+index);
-
-                //data.add(new RowData(rowDataList));
-               /*Thread rowThread = new Thread(new Runnable() {
-                   @Override
-                   public void run() {
-                   }
-               });
-               rowThread.start();
-            }
-
-
-            tableView.setItems(data);
-            tableView.getColumns().addAll(columns);
-
-
-      private void showExcelFileContent(HashMap<String, ArrayList<String>> file) {
-
-
-        //Original
-        contentBox.setVisible(true);
-        tabs= new TabPane();
-        tabs.setSide(Side.BOTTOM);
-        tabs.setPrefHeight(Region.USE_COMPUTED_SIZE);
-        tabs.setPrefWidth(Region.USE_COMPUTED_SIZE);
-        contentBox.getChildren().add(tabs);
-
-        System.out.println(new Timestamp(System.currentTimeMillis()));
-
-        int rowCount = 10;
-        int columnCount = 180;
-        GridBase grid = new GridBase(rowCount, columnCount);
-
-        ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
-        for (int row = 0; row < grid.getRowCount(); ++row) {
-            final ObservableList<SpreadsheetCell> list = FXCollections.observableArrayList();
-            for (int column = 0; column < grid.getColumnCount(); ++column) {
-                list.add(SpreadsheetCellType.STRING.createCell(row, column, 1, 1,"value"));
-            }
-            rows.add(list);
-        }
-        grid.setRows(rows);
-
-        SpreadsheetView spv = new SpreadsheetView(grid);
-
-        System.out.println(new Timestamp(System.currentTimeMillis()));
-
-        ScrollPane page = new ScrollPane();
-        page.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        page.setPrefHeight(Region.USE_COMPUTED_SIZE);
-        page.setPrefWidth(Region.USE_COMPUTED_SIZE);
-        page.setMaxHeight(Region.USE_COMPUTED_SIZE);
-        page.setMaxWidth(Region.USE_COMPUTED_SIZE);
-
-        page.setContent(spv);
-        tabs.getTabs().add(new Tab("pageName",page));
-
-    }
-
-    public void sss(HashMap<String,ArrayList<String>> file){
-      //Make file
-        ArrayList<String> pagesName= new ArrayList<>();
-        pagesName.add("0");
-        pagesName.add("1");
-        pagesName.add("2");
-        pagesName.add("3");
-        file.put("pagesNames",pagesName);
-
-        for (String pageName:pagesName){
-            ArrayList<String> indexesArray = new ArrayList<>();
-            for (int i =1;i<100;i++){
-                indexesArray.add(String.valueOf(i));
-            }
-            file.put(pageName+"Indexes",indexesArray);
-            ArrayList<String> columnsName = new ArrayList<>();
-            for (int i=1;i<100;i++){
-                columnsName.add(String.valueOf(i));
-            }
-            //columnsName.add("A");
-            //columnsName.add("B");
-            //columnsName.add("C");
-            //columnsName.add("D");
-            //columnsName.add("E");
-            file.put(pageName+"Columns",columnsName);
-            for (int i =1;i<100;i++){
-                ArrayList<String> row =new ArrayList();
-                for(String column: file.get(pageName+"Columns"))
-                {
-                    row.add("0");
-                }
-                file.put(pageName+i,row);
-            }
-
-        }
-    }
-
-    * */
-
 }

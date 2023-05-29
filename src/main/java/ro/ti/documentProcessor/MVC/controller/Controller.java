@@ -7,6 +7,9 @@ import ro.ti.documentProcessor.MVC.Interfaces.ControllerFile;
 import ro.ti.documentProcessor.MVC.Interfaces.Model;
 import ro.ti.documentProcessor.MVC.Interfaces.View;
 import ro.ti.documentProcessor.MVC.controller.database.Database;
+import ro.ti.documentProcessor.MVC.controller.file.PdfController;
+import ro.ti.documentProcessor.MVC.controller.file.RtfController;
+import ro.ti.documentProcessor.MVC.controller.file.XlsController;
 import ro.ti.documentProcessor.MVC.controller.utils.FileChecker;
 
 import java.awt.*;
@@ -22,11 +25,6 @@ public class Controller implements ro.ti.documentProcessor.MVC.Interfaces.Contro
     Database database;
 
     Properties properties;
-
-    ControllerFile xlsController ;
-    ControllerFile rtfController;
-    ControllerFile pdfController;
-
     @Override
     public void openFile(String path)  {
         try {
@@ -85,8 +83,14 @@ public class Controller implements ro.ti.documentProcessor.MVC.Interfaces.Contro
     }
 
     @Override
-    public HashMap readFromFile(String path, String extension) throws IOException {
-        return null;
+    public HashMap readFromFile(String path, String extension) {
+        ControllerFile controllerFile = getFileController(extension);
+        try {
+            HashMap file  =  controllerFile.readFromFile(path);
+            return file;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -127,9 +131,7 @@ public class Controller implements ro.ti.documentProcessor.MVC.Interfaces.Contro
 
     @Override
     public void reloadFile(String path, Timestamp time) {
-        view.updateFile(path,time);
-        //string sss= model.processFile();
-        //view.loadFile(sss);
+        view.reloadFile(path,time);
     }
 
     @Override
@@ -137,15 +139,15 @@ public class Controller implements ro.ti.documentProcessor.MVC.Interfaces.Contro
         database.checkifConnectionIsValid();
     }
 
-    protected ControllerFile getFileController(String extension) {
+    private ControllerFile getFileController(String extension) {
         switch (extension){
             case "xls":
             case "xlsx":
-                return xlsController !=null ? xlsController :(xlsController = new XlsController());
+                return XlsController.getInstance();
             case "rtf":
-                return rtfController !=null ? rtfController :(rtfController = new RtfController());
+                return RtfController.getInstance();
             case "pdf":
-                return pdfController !=null ? pdfController :(pdfController = new PdfController());
+                return PdfController.getInstance();
             default:
                 return null;
         }
