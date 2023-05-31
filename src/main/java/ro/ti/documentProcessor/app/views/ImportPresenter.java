@@ -32,13 +32,15 @@ import org.controlsfx.control.spreadsheet.SpreadsheetCell;
 import org.controlsfx.control.spreadsheet.SpreadsheetCellType;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
 import ro.ti.documentProcessor.DocumentProcessorGluonApplication;
+import ro.ti.documentProcessor.MVC.model.ModelXlsProcessor;
 import ro.ti.documentProcessor.app.Data;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
+import java.util.stream.IntStream;
 
 public class ImportPresenter {
 
@@ -80,25 +82,21 @@ public class ImportPresenter {
         table.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
             System.gc();
             Data data = tvObservableList.get(newValue.intValue());
+            //Data preview
             HashMap file =  DocumentProcessorGluonApplication.getController().readFromFile(data.getPath(),data.getExtension());
+            System.out.println();
             Platform.runLater(() -> setTabs(file,data.getExtension()));
+            dataPreviewBox.getChildren().get(1).setVisible(true);
         });
-
-        tvObservableList.addAll(
-                new Data("File a","./File a","xls",new Timestamp(System.currentTimeMillis())),
-                new Data("File b","./gss","xlsx",new Timestamp(System.currentTimeMillis()))
-        );
 
 
         TableColumn<Data, String> colName = new TableColumn<>("Name");
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        colName.setStyle("-fx-font-family:\"Helvetica neue regular\"");
         TableColumn<Data, String> colExtension = new TableColumn<>("Extension");
         colExtension.setCellValueFactory(new PropertyValueFactory<>("extension"));
         TableColumn<Data, Timestamp> colLastModified = new TableColumn<>("Last modified");
         colLastModified.setCellValueFactory(new PropertyValueFactory<>("lastModified"));
         TableColumn<Data, Void> colClientName = new TableColumn<>("Client Name");
-
 
 
         colClientName.setStyle("-fx-text-inner-color:red");
@@ -158,6 +156,7 @@ public class ImportPresenter {
                             Data data = getTableView().getItems().get(getIndex());
                             // erase it from current list
                             tvObservableList.remove(getTableView().getItems().get(getIndex()));
+                            dataPreviewBox.getChildren().remove(1);
                         });
                         //erase btn
                         Button deleteBtn = new Button();
@@ -165,6 +164,7 @@ public class ImportPresenter {
                         deleteBtn.setOnAction((ActionEvent event)->{
                             tabs = null;
                             tvObservableList.remove(getTableView().getItems().get(getIndex()));
+                            dataPreviewBox.getChildren().remove(1);
                         });
                         btns.getChildren().addAll(editBtn,saveBtn,deleteBtn);
 
@@ -212,14 +212,14 @@ public class ImportPresenter {
             switch (extension){
                 case "xls":
                 case "xlsx":
-                    tvObservableList.add(new Data(file.getName().substring(0,file.getName().indexOf(".")),file.getAbsolutePath(),extension,new Timestamp(file.lastModified())));
+                    tvObservableList.add(new Data(file.getName().substring(0,file.getName().indexOf(".")),null,file.getAbsolutePath(),extension,new Timestamp(file.lastModified())));
                     break;
                 case "rtf":
                     pathText.setText("Working on the .rtf case");
-                    tvObservableList.add(new Data(file.getName().substring(0,file.getName().indexOf(".")),file.getAbsolutePath(),extension,new Timestamp(file.lastModified())));
+                    tvObservableList.add(new Data(file.getName().substring(0,file.getName().indexOf(".")),null,file.getAbsolutePath(),extension,new Timestamp(file.lastModified())));
                     break;
                 case "pdf":
-                    tvObservableList.add(new Data(file.getName().substring(0,file.getName().indexOf(".")),file.getAbsolutePath(),extension,new Timestamp(file.lastModified())));
+                    tvObservableList.add(new Data(file.getName().substring(0,file.getName().indexOf(".")),null,file.getAbsolutePath(),extension,new Timestamp(file.lastModified())));
                     pathText.setText("Working on the .pdf case");
                     break;
                 default:
@@ -232,7 +232,7 @@ public class ImportPresenter {
     }
 
 
-    private void setTabs(HashMap<String,ArrayList<String>> file, String extension) {
+    private void setTabs(HashMap<String,Object> file, String extension) {
         switch (extension)
         {
             case "xls":
@@ -250,25 +250,36 @@ public class ImportPresenter {
 
     }
 
-    private void setXlsTabs(HashMap<String, ArrayList<String>> file) {
-        tabs= new TabPane();
-        ArrayList<String> pages  = file.get("Pages");
-        for (String page:
-                pages) {
-            int rowCount = file.get(page+"Indexes").size();
-            int columnCount = file.get(page+"Columns").size();
-            GridBase grid = new GridBase(rowCount, columnCount);
+    private void setXlsTabs(HashMap<String, Object> file) {
+        tabs = new TabPane();
+        ArrayList<String> pages = (ArrayList<String>) file.get("Pages");
+        Collections.sort(pages, new ModelXlsProcessor.AlphanumericComparator()); // Sort the pages numerically
+        for (String page : pages) {
+            int rowCount = ((ArrayList<String>) file.get(page + "Indexes")).size();
+            GridBase grid = new GridBase(rowCount, 100);
+            grid.setLocked(true);
             ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
-            for (int row = 0; row < grid.getRowCount(); ++row) {
+            ArrayList<String> indexes = (ArrayList<String>) file.get(page + "Indexes");
+            Collections.sort(indexes, new ModelXlsProcessor.AlphanumericComparator()); // Sort the indexes numerically
+            LinkedHashMap<String, ArrayList<String>> pageData = (LinkedHashMap<String, ArrayList<String>>) file.get(page);
+
+            for (String index : indexes) {
+                ArrayList<String> rowData = pageData.get(index);
                 final ObservableList<SpreadsheetCell> list = FXCollections.observableArrayList();
-                for (int column = 0; column < grid.getColumnCount(); ++column) {
-                    ArrayList<String> line  = file.get(page+row);
-                    list.add(SpreadsheetCellType.STRING.createCell(row, column, 1, 1,file.get(page+row).get(column)));
+                for (int column = 0; column < grid.getColumnCount() - 1; ++column) {
+
+                    while (column < rowData.size()  && column < grid.getColumnCount() - 1){
+                        list.add(SpreadsheetCellType.STRING.createCell(Integer.parseInt(index), column, 1, 1, rowData.get(column)));
+                        column++;
+                    }
+
+                    list.add(SpreadsheetCellType.STRING.createCell(Integer.parseInt(index), column, 1, 1, ""));
                 }
+
                 rows.add(list);
             }
-            grid.setRows(rows);
 
+            grid.setRows(rows);
             SpreadsheetView spv = new SpreadsheetView(grid);
             ScrollPane scrllablePage = new ScrollPane();
             scrllablePage.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -277,15 +288,14 @@ public class ImportPresenter {
             scrllablePage.setMaxHeight(Region.USE_COMPUTED_SIZE);
             scrllablePage.setMaxWidth(Region.USE_COMPUTED_SIZE);
             scrllablePage.setContent(spv);
-            tabs.getTabs().add(new Tab(page,spv));
+            tabs.getTabs().add(new Tab(page, spv));
         }
-        if (dataPreviewBox.getChildren().size()<2) dataPreviewBox.getChildren().add(tabs);
-        else {
-            dataPreviewBox.getChildren().remove(1);
+        if (dataPreviewBox.getChildren().contains(tabs)) {
+            dataPreviewBox.getChildren().remove(tabs);
+        } else {
             dataPreviewBox.getChildren().add(tabs);
         }
     }
-
     public void clickSound(MouseEvent mouseEvent) {
     }
 
@@ -297,11 +307,40 @@ public class ImportPresenter {
     }
 
     public void reloadFile(String path, Timestamp time){
-        tabs =  null;
-        Data dataOld =tvObservableList.filtered(data -> data.getPath().equals(path)).get(0) ;
+        dataPreviewBox.getChildren().get(1).setVisible(false);
+        Data dataOld = tvObservableList.filtered(data -> data.getPath().equals(path)).get(0);
         tvObservableList.remove(dataOld);
-        Data dataNew =new Data(dataOld);
+        Data dataNew = new Data(dataOld);
         dataNew.setLastModified(time);
+
         tvObservableList.add(dataNew);
     }
+
+    public static class AlphanumericComparator implements Comparator<String> {
+        @Override
+        public int compare(String s1, String s2) {
+            String[] parts1 = s1.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
+            String[] parts2 = s2.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
+
+            int length = Math.min(parts1.length, parts2.length);
+            for (int i = 0; i < length; i++) {
+                if (Character.isDigit(parts1[i].charAt(0)) && Character.isDigit(parts2[i].charAt(0))) {
+                    int num1 = Integer.parseInt(parts1[i]);
+                    int num2 = Integer.parseInt(parts2[i]);
+                    int compareResult = Integer.compare(num1, num2);
+                    if (compareResult != 0) {
+                        return compareResult;
+                    }
+                } else {
+                    int compareResult = parts1[i].compareTo(parts2[i]);
+                    if (compareResult != 0) {
+                        return compareResult;
+                    }
+                }
+            }
+
+            return Integer.compare(parts1.length, parts2.length);
+        }
+    }
+
 }

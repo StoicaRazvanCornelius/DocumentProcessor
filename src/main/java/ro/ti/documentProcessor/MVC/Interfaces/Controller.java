@@ -1,5 +1,7 @@
 package ro.ti.documentProcessor.MVC.Interfaces;
 
+import javafx.util.converter.LocalDateTimeStringConverter;
+
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ public interface Controller {
     public void setProperties(Properties properties);
     public void testMVC();
     public void testController();
+    public  HashMap readDatabaseEntries(String fileName, String clientName, String fileType, String startDateTime, String endDateTime);
     void reloadFile(String path, Timestamp dateTimeUpdated);
     void pingDatabase();
 

@@ -1,5 +1,7 @@
 package ro.ti.documentProcessor;
 
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import ro.ti.documentProcessor.MVC.Interfaces.*;
 import ro.ti.documentProcessor.MVC.controller.rest.Endpoint;
 import ro.ti.documentProcessor.MVC.model.ModelXlsProcessor;
@@ -18,7 +20,6 @@ public class Main {
 
 
     public static void main(String[] args) {
-
         //properties file. Settings remain the same even if you close the app.
         try {
             //String configPropertiesPath = DocumentProcessorGluonApplication.class.getResource("config.properties").getPath();

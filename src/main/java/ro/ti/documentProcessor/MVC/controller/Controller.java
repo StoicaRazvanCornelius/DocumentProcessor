@@ -35,52 +35,7 @@ public class Controller implements ro.ti.documentProcessor.MVC.Interfaces.Contro
         }
     }
 
-    public void writeToFile(String path, String name,String extension) throws IOException {
-        Workbook workbook = new XSSFWorkbook();
 
-        Sheet sheet = workbook.createSheet("Persons");
-        sheet.setColumnWidth(0, 6000);
-        sheet.setColumnWidth(1, 4000);
-
-        Row header = sheet.createRow(0);
-
-        CellStyle headerStyle = workbook.createCellStyle();
-        headerStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
-        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-
-        XSSFFont font = ((XSSFWorkbook) workbook).createFont();
-        font.setFontName("Arial");
-        font.setFontHeightInPoints((short) 16);
-        font.setBold(true);
-        headerStyle.setFont(font);
-
-        Cell headerCell = header.createCell(0);
-        headerCell.setCellValue("Name");
-        headerCell.setCellStyle(headerStyle);
-
-        headerCell = header.createCell(1);
-        headerCell.setCellValue("Age");
-        headerCell.setCellStyle(headerStyle);
-
-        CellStyle style = workbook.createCellStyle();
-        style.setWrapText(true);
-
-        Row row = sheet.createRow(2);
-        Cell cell = row.createCell(0);
-        cell.setCellValue("John Smith");
-        cell.setCellStyle(style);
-
-        cell = row.createCell(1);
-        cell.setCellValue(20);
-        cell.setCellStyle(style);
-
-        path ="E:\\JavaProjects\\DocumentProcessor\\src\\main\\resources\\xlsFiles\\";
-        String fileLocation = path.substring(0, path.length()) + "temp.xlsx";
-
-        FileOutputStream outputStream = new FileOutputStream(fileLocation);
-        workbook.write(outputStream);
-        workbook.close();
-    }
 
     @Override
     public HashMap readFromFile(String path, String extension) {
@@ -95,7 +50,6 @@ public class Controller implements ro.ti.documentProcessor.MVC.Interfaces.Contro
 
     @Override
     public void writeToFile(String path, String name, String extension, HashMap content) throws IOException {
-
     }
 
     @Override
@@ -127,6 +81,11 @@ public class Controller implements ro.ti.documentProcessor.MVC.Interfaces.Contro
     @Override
     public void testController() {
         System.out.print("check\n");
+    }
+
+    @Override
+    public HashMap readDatabaseEntries(String fileName, String clientName, String fileType, String startDateTime, String endDateTime) {
+        return database.getEntriesFor(fileName, clientName, fileType, startDateTime,  endDateTime);
     }
 
     @Override

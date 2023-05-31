@@ -33,6 +33,7 @@ public class MainPresenter {
                 appBar.setTitleText("Main");
                 appBar.getActionItems().add(MaterialDesignIcon.SEARCH.button(e -> 
                         System.out.println("Search")));
+
             }
         });
 

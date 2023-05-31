@@ -15,7 +15,7 @@ public class Endpoint {
     public static void main(String[] args) {
         Endpoint endpoint = new Endpoint();
         //endpoint.uploadFile(null);
-        endpoint.downloadFile(null);
+        //endpoint.downloadFile(null);
     }
     public void uploadFile(String filePath) {
         filePath = "C:\\Users\\stoic\\OneDrive\\Desktop\\xlsFiles\\Book1.xlsx";

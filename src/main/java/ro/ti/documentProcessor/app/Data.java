@@ -22,9 +22,10 @@ public class Data {
     }
 
 
-    public Data(String name, String path, String extension, Timestamp lastModified){
+    public Data(String name,String clientName ,String path, String extension, Timestamp lastModified){
         this.name= name;
         this.path= path;
+        this.clientName = clientName;
         this.extension=extension;
         this.lastModified=lastModified;
     }

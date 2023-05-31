@@ -1,6 +1,8 @@
 package ro.ti.documentProcessor.MVC.controller.database;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
 
 import static ro.ti.documentProcessor.DocumentProcessorGluonApplication.properties;
@@ -66,4 +68,55 @@ public class Database {
             throw new RuntimeException(e);
         }
     }
+
+    public HashMap getEntriesFor(String fileName, String clientName, String fileType, String startDateTime, String endDateTime) {
+        HashMap<String, ArrayList<String >>results  = new HashMap<>();
+        query = "SELECT * FROM file f JOIN client c ON f.clientId = c.id JOIN filetype ft ON f.typeId = ft.id WHERE 1=1";
+        if (fileName != null && !fileName.isEmpty()) {
+            query +=" AND f.name = '" + fileName+ "'";
+        }
+
+        if (clientName != null && !clientName.isEmpty()) {
+            query +=" AND c.clientName = '"+clientName+"'";
+        }
+
+        if (fileType != null && !fileType.isEmpty()) {
+            query +=" AND ft.typeName = '"+fileType+"'";
+        }
+
+        if (startDateTime != null && !startDateTime.isEmpty()) {
+            query +=" AND f.lastModified >= '"+startDateTime+"'";
+        }
+
+        if (endDateTime != null && !endDateTime.isEmpty()) {
+            query +=" AND f.lastModified <= '"+endDateTime+"'";
+        }
+
+        query +=" ORDER BY f.name ASC, c.clientName ASC, ft.typeName ASC";
+
+        try {
+            ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                String file = resultSet.getString("name");
+                String client = resultSet.getString("clientName");
+                String type = resultSet.getString("typeName");
+
+                results.computeIfAbsent("fileName", key -> new ArrayList<>()).add(file);
+                results.computeIfAbsent("clientName", key -> new ArrayList<>()).add(client);
+                results.computeIfAbsent("fileType", key -> new ArrayList<>()).add(type);
+            }
+            return results;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 }
+
+
+
+
+
+
+
