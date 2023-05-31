@@ -9,6 +9,7 @@ import ro.ti.documentProcessor.MVC.model.ModelXlsProcessor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class Main {
@@ -23,14 +24,13 @@ public class Main {
         //properties file. Settings remain the same even if you close the app.
         try {
             //String configPropertiesPath = DocumentProcessorGluonApplication.class.getResource("config.properties").getPath();
-            String configPropertiesPath = DocumentProcessorGluonApplication.class.getResource("config.properties").getPath();
-            FileInputStream propsInput = new FileInputStream(configPropertiesPath);
+            InputStream propsInput = DocumentProcessorGluonApplication.class.getResourceAsStream("/ro/ti/documentProcessor/config.properties");
             properties = new Properties();
             properties.load(propsInput);
         }catch (FileNotFoundException e){
-            //run default interaface and create new config file
+            e.printStackTrace();
         } catch (IOException e) {
-            //throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
         controller=  new ro.ti.documentProcessor.MVC.controller.Controller();
