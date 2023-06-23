@@ -6,6 +6,7 @@ ro\ti\documentProcessor\App\views\ImportPresenter$AlphanumericComparator.class
 ro\ti\documentProcessor\MVC\Interfaces\ControllerFile.class
 ro\ti\documentProcessor\App\views\ExportPresenter.class
 ro\ti\documentProcessor\MVC\Interfaces\Model.class
+ro\ti\documentProcessor\App\views\ExportPresenter$1$1.class
 ro\ti\documentProcessor\MVC\controller\rest\Endpoint.class
 ro\ti\documentProcessor\App\views\MainView.class
 ro\ti\documentProcessor\App\views\ImportView.class
@@ -16,6 +17,7 @@ ro\ti\documentProcessor\App\views\ImportPresenter$1$1.class
 ro\ti\documentProcessor\App\views\ImportPresenter$2.class
 ro\ti\documentProcessor\App\views\ExportView.class
 ro\ti\documentProcessor\MVC\controller\file\XlsController.class
+ro\ti\documentProcessor\App\views\ExportPresenter$1.class
 ro\ti\documentProcessor\MVC\controller\utils\FileChecker$1.class
 ro\ti\documentProcessor\App\views\MainPresenter.class
 ro\ti\documentProcessor\MVC\controller\file\PdfController.class
