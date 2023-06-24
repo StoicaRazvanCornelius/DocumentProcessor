@@ -10,7 +10,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -20,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -27,20 +27,15 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.util.Callback;
-import org.controlsfx.control.spreadsheet.GridBase;
-import org.controlsfx.control.spreadsheet.SpreadsheetCell;
-import org.controlsfx.control.spreadsheet.SpreadsheetCellType;
-import org.controlsfx.control.spreadsheet.SpreadsheetView;
 import ro.ti.documentProcessor.DocumentProcessorGluonApplication;
 import ro.ti.documentProcessor.MVC.model.ModelXlsProcessor;
 import ro.ti.documentProcessor.app.Data;
+import ro.ti.documentProcessor.app.RowTablePreview;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.sql.Timestamp;
 import java.util.*;
-import java.util.stream.IntStream;
 
 public class ImportPresenter {
 
@@ -84,9 +79,9 @@ public class ImportPresenter {
             Data data = tvObservableList.get(newValue.intValue());
             //Data preview
             HashMap file =  DocumentProcessorGluonApplication.getController().readFromFile(data.getPath(),data.getExtension());
-            System.out.println();
             Platform.runLater(() -> setTabs(file,data.getExtension()));
-            dataPreviewBox.getChildren().get(1).setVisible(true);
+            System.out.println("Done with tables");
+            //dataPreviewBox.getChildren().get(1).setVisible(true);
         });
 
 
@@ -254,47 +249,44 @@ public class ImportPresenter {
         tabs = new TabPane();
         ArrayList<String> pages = (ArrayList<String>) file.get("Pages");
         Collections.sort(pages, new ModelXlsProcessor.AlphanumericComparator()); // Sort the pages numerically
+
         for (String page : pages) {
-            int rowCount = ((ArrayList<String>) file.get(page + "Indexes")).size();
-            GridBase grid = new GridBase(rowCount, 100);
-            grid.setLocked(true);
-            ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
-            ArrayList<String> indexes = (ArrayList<String>) file.get(page + "Indexes");
-            Collections.sort(indexes, new ModelXlsProcessor.AlphanumericComparator()); // Sort the indexes numerically
-            LinkedHashMap<String, ArrayList<String>> pageData = (LinkedHashMap<String, ArrayList<String>>) file.get(page);
+            int rowSize= 100;
+            int columnSize = ((ArrayList<String>) file.get(page + "Indexes")).size();
+            TableView<RowTablePreview> tablePreview = new TableView<>();
+            TableColumn<RowTablePreview, String>[] columnsPreview = new TableColumn[rowSize];
 
-            for (String index : indexes) {
-                ArrayList<String> rowData = pageData.get(index);
-                final ObservableList<SpreadsheetCell> list = FXCollections.observableArrayList();
-                for (int column = 0; column < grid.getColumnCount() - 1; ++column) {
-
-                    while (column < rowData.size()  && column < grid.getColumnCount() - 1){
-                        list.add(SpreadsheetCellType.STRING.createCell(Integer.parseInt(index), column, 1, 1, rowData.get(column)));
-                        column++;
-                    }
-
-                    list.add(SpreadsheetCellType.STRING.createCell(Integer.parseInt(index), column, 1, 1, ""));
-                }
-
-                rows.add(list);
+            for (int i = 0; i < rowSize; i++) {
+                final int columnIndex = i;
+                TableColumn<RowTablePreview, String> column = new TableColumn<>("Column " + (columnIndex + 1));
+                column.setCellValueFactory(cellData -> cellData.getValue().getCells().get(columnIndex).getValue());
+                column.setCellFactory(TextFieldTableCell.forTableColumn());
+                columnsPreview[i] = column;
             }
 
-            grid.setRows(rows);
-            SpreadsheetView spv = new SpreadsheetView(grid);
-            ScrollPane scrllablePage = new ScrollPane();
-            scrllablePage.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-            scrllablePage.setPrefHeight(Region.USE_COMPUTED_SIZE);
-            scrllablePage.setPrefWidth(Region.USE_COMPUTED_SIZE);
-            scrllablePage.setMaxHeight(Region.USE_COMPUTED_SIZE);
-            scrllablePage.setMaxWidth(Region.USE_COMPUTED_SIZE);
-            scrllablePage.setContent(spv);
-            tabs.getTabs().add(new Tab(page, spv));
+            ObservableList<RowTablePreview> rowsPreview = FXCollections.observableArrayList();
+            tablePreview.setItems(rowsPreview);
+            tablePreview.getColumns().addAll(columnsPreview);
+            ArrayList<String> indexes = (ArrayList<String>) file.get(page + "Indexes");
+            LinkedHashMap<String, ArrayList<String>> pageData = (LinkedHashMap<String, ArrayList<String>>) file.get(page);
+
+
+            for (String index : indexes) {
+                ArrayList<String> row = pageData.get(index);
+                while (row.size()<rowSize) row.add("");
+                rowsPreview.add(new RowTablePreview(pageData.get(index)));
+            }
+            ScrollPane scrollablePage = new ScrollPane();
+            scrollablePage.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+            scrollablePage.setPrefHeight(Region.USE_COMPUTED_SIZE);
+            scrollablePage.setPrefWidth(Region.USE_COMPUTED_SIZE);
+            scrollablePage.setMaxHeight(Region.USE_COMPUTED_SIZE);
+            scrollablePage.setMaxWidth(Region.USE_COMPUTED_SIZE);
+            scrollablePage.setContent(tablePreview);
+            tabs.getTabs().add(new Tab(page, scrollablePage));
         }
-        if (dataPreviewBox.getChildren().contains(tabs)) {
-            dataPreviewBox.getChildren().remove(tabs);
-        } else {
-            dataPreviewBox.getChildren().add(tabs);
-        }
+        dataPreviewBox.getChildren().add(tabs);
+
     }
     public void clickSound(MouseEvent mouseEvent) {
     }
