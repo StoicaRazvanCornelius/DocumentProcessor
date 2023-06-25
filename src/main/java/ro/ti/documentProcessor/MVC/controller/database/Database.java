@@ -9,13 +9,13 @@ import static ro.ti.documentProcessor.DocumentProcessorGluonApplication.properti
 
 public class Database {
 
-    String url;
-    String username;
-    String password;
-    Connection connection;
-    Statement statement;
-    ResultSet resultSet;
-    String query;
+    private String url;
+    private String username;
+    private String password;
+    private Connection connection;
+    private Statement statement;
+    private ResultSet resultSet;
+    private String query;
 
     String retriveAllClients = "SELECT * FROM documentprocessorapp.client";
     String retriveAllFiles = "SELECT * FROM documentprocessorapp.file";
@@ -42,7 +42,18 @@ public class Database {
             throw new RuntimeException(e);
         }
     }
+    public Database(){
+        url = "jdbc:mysql://localhost:3306/documentprocessorapp";
+        username = "root";
+        password = "1234";
 
+        try {
+            connection = DriverManager.getConnection(url, username, password);
+            statement = connection.createStatement();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public void selectTypes(){
 
         try {
@@ -55,7 +66,6 @@ public class Database {
 
             resultSet.close();
             statement.close();
-            connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -111,6 +121,59 @@ public class Database {
         }
 
     }
+
+    public boolean checkIfClientExist(String clientName){
+        try {
+            query = "SELECT * FROM client WHERE clientName = \"" + clientName +"\"";
+            resultSet = statement.executeQuery(query);
+
+            if (resultSet.next()) {
+                resultSet.close();
+                statement.close();
+                return true;
+            } else {
+                // The result set is empty
+                resultSet.close();
+                statement.close();
+                return false;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    };
+    public boolean makeNewDocumentEntry(String clientName, String type, String name, String lastModified) {
+        try {
+            String query = "INSERT INTO `file` (`name`, `path`, `typeId`, `clientId`, `lastModfied`)\n" +
+                    "SELECT ?, null, `ft`.`id`, `c`.`id`, ?\n" +
+                    "FROM `filetype` AS `ft`\n" +
+                    "JOIN `client` AS `c` ON `ft`.`typeName` = ? AND `c`.`clientName` = ?";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, name);
+            statement.setString(2, lastModified);
+            statement.setString(3, type);
+            statement.setString(4, clientName);
+
+            int rowsAffected = statement.executeUpdate();
+
+            statement.close();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static void main(String[] args) {
+        Database database = new Database();
+        if (database.checkIfClientExist("John Doe")){
+            String clientName = "John Doe";
+            String type = "xls";
+            String lastModified = "2023-05-25 10:30:00";
+            String name ="Test document";
+            database.makeNewDocumentEntry(clientName,type, name, lastModified );
+        }
+        System.out.println();
+    }
+
 
 }
 
