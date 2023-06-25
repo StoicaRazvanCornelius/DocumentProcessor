@@ -18,6 +18,7 @@ public interface Controller {
     public void testMVC();
     public void testController();
     public  HashMap readDatabaseEntries(String fileName, String clientName, String fileType, String startDateTime, String endDateTime);
+    public  boolean insertNewFile(String path,String name, String type, String lastModified, String clientName);
     void reloadFile(String path, Timestamp dateTimeUpdated);
     void pingDatabase();
 

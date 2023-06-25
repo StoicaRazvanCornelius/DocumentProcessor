@@ -1,11 +1,12 @@
 package ro.ti.documentProcessor.MVC.controller.rest;
 
-import ro.ti.documentProcessor.DocumentProcessorGluonApplication;
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 
 public class Endpoint {
@@ -14,57 +15,101 @@ public class Endpoint {
 
     public static void main(String[] args) {
         Endpoint endpoint = new Endpoint();
-        //endpoint.uploadFile(null);
+        String filePath = "C:\\Users\\stoic\\OneDrive\\Desktop\\xlsFiles\\Book1.xlsx"; // Replace with the actual file path
+        String name = "Book1";
+        String extension = "xlsx";
+        String path = ".\\files";
+        String client = "John%20Doe"; // Replace space with %20
+        String lastModified = "2023-05-25 10:30:00";
+        endpoint.uploadFile(filePath, name, extension, path, client,lastModified);
         //endpoint.downloadFile(null);
     }
-    public void uploadFile(String filePath) {
-        filePath = "C:\\Users\\stoic\\OneDrive\\Desktop\\xlsFiles\\Book1.xlsx";
-        File file = new File(filePath);
 
-        if (!file.exists()) {
-            System.out.println("File does not exist.");
-            return;
-        }
-
+    public boolean uploadFile(String filePath, String name, String extension, String path, String client, String lastModified) {
         try {
-            URI uri = URI.create(BASE_URI);
-            HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
-
-            connection.setDoOutput(true);
+            String encodedPath = URLEncoder.encode(path, "UTF-8");
+            String encodedUrl = "http://localhost/upload.php";
+            URL url = new URL(encodedUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
+            connection.setDoOutput(true);
+            String boundary = "----WebKitFormBoundary" + Long.toHexString(System.currentTimeMillis());
+            connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
 
-            // Set the appropriate headers for file upload
-            connection.setRequestProperty("Content-Type", "application/octet-stream");
-            connection.setRequestProperty("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+            OutputStream outputStream = connection.getOutputStream();
+            PrintWriter writer = new PrintWriter(new OutputStreamWriter(outputStream, "UTF-8"), true);
 
-            // Read the file and write it to the connection's output stream
-            try (BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(file));
-                 OutputStream outputStream = connection.getOutputStream()) {
-                byte[] buffer = new byte[4096];
-                int bytesRead;
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    outputStream.write(buffer, 0, bytesRead);
-                }
-                outputStream.flush();
+            // Write the file_name parameter
+            writer.append("--").append(boundary).append("\r\n");
+            writer.append("Content-Disposition: form-data; name=\"file_name\"\r\n\r\n");
+            writer.append(name).append("\r\n");
+
+            // Write the extension parameter
+            writer.append("--").append(boundary).append("\r\n");
+            writer.append("Content-Disposition: form-data; name=\"extension\"\r\n\r\n");
+            writer.append(extension).append("\r\n");
+
+            // Write the path parameter
+            writer.append("--").append(boundary).append("\r\n");
+            writer.append("Content-Disposition: form-data; name=\"path\"\r\n\r\n");
+            writer.append(encodedPath).append("\r\n");
+
+            // Write the client parameter
+            writer.append("--").append(boundary).append("\r\n");
+            writer.append("Content-Disposition: form-data; name=\"client\"\r\n\r\n");
+            writer.append(client).append("\r\n");
+
+            // Write the lastModified parameter
+            writer.append("--").append(boundary).append("\r\n");
+            writer.append("Content-Disposition: form-data; name=\"lastModified\"\r\n\r\n");
+            writer.append(lastModified).append("\r\n");
+
+            // Write the file parameter
+            writer.append("--").append(boundary).append("\r\n");
+            writer.append("Content-Disposition: form-data; name=\"file\"; filename=\"").append(filePath).append("\"\r\n");
+            writer.append("Content-Type: application/octet-stream\r\n\r\n");
+            writer.flush();
+
+            // Write the file data
+            FileInputStream fileInputStream = new FileInputStream(filePath);
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            while ((bytesRead = fileInputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
             }
+            outputStream.flush();
+            fileInputStream.close();
 
+            // End of multipart/form-data
+            writer.append("\r\n").append("--").append(boundary).append("--").append("\r\n");
+            writer.close();
+
+            /*
             // Get the response from the server
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                System.out.println("File uploaded successfully.");
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                    String line;
+                    StringBuilder response = new StringBuilder();
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line).append("\n");
+                    }
+                    System.out.println("Server Response: " + response.toString());
+                }
             } else {
                 System.out.println("Failed to upload file. Response code: " + responseCode);
             }
-
-            // Close the connection
+             */
             connection.disconnect();
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     public void downloadFile(String savePath) {
-        String fileURL = BASE_URI;
+        String fileURL = "http://localhost/download.php";
         savePath = "C:\\Users\\stoic\\OneDrive\\Desktop\\xlsFiles\\Test.txt";
 
         try {

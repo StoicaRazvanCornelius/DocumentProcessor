@@ -151,8 +151,9 @@ public class ImportPresenter {
                             Data data = getTableView().getItems().get(getIndex());
                             // erase it from current list
                             tvObservableList.remove(getTableView().getItems().get(getIndex()));
-                            dataPreviewBox.getChildren().remove(1);
-                            //DocumentProcessorGluonApplication.getController().insertNewDocument(data.getName(),data.getClientName(),data.get);
+                            if (dataPreviewBox.getChildren().size()>2) dataPreviewBox.getChildren().remove(1);
+                            //System.out.println(DocumentProcessorGluonApplication.getController().insertNewFile(data.getName(),data.getExtension(), String.valueOf(data.getLastModified()),data.getClientName()));
+
                         });
                         //erase btn
                         Button deleteBtn = new Button();

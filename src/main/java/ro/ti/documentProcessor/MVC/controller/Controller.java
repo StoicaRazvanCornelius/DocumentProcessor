@@ -10,6 +10,7 @@ import ro.ti.documentProcessor.MVC.controller.database.Database;
 import ro.ti.documentProcessor.MVC.controller.file.PdfController;
 import ro.ti.documentProcessor.MVC.controller.file.RtfController;
 import ro.ti.documentProcessor.MVC.controller.file.XlsController;
+import ro.ti.documentProcessor.MVC.controller.rest.Endpoint;
 import ro.ti.documentProcessor.MVC.controller.utils.FileChecker;
 
 import java.awt.*;
@@ -23,6 +24,8 @@ public class Controller implements ro.ti.documentProcessor.MVC.Interfaces.Contro
     Model model;
     View view;
     Database database;
+
+    Endpoint endpoint = new Endpoint();
 
     Properties properties;
     @Override
@@ -86,6 +89,16 @@ public class Controller implements ro.ti.documentProcessor.MVC.Interfaces.Contro
     @Override
     public HashMap readDatabaseEntries(String fileName, String clientName, String fileType, String startDateTime, String endDateTime) {
         return database.getEntriesFor(fileName, clientName, fileType, startDateTime,  endDateTime);
+    }
+
+    @Override
+    public boolean insertNewFile(String path,String name, String type, String lastModified, String clientName) {
+        path = "C:\\Users\\stoic\\OneDrive\\Desktop\\xlsFiles\\Book1.xlsx"; // Replace with the actual file path
+        name = "Book1";
+        type = "xlsx";
+        clientName = "John_Doe"; // Replace space with %20
+
+        return endpoint.uploadFile(path,name,type,lastModified,clientName,lastModified);
     }
 
     @Override

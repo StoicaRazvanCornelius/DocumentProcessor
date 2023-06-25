@@ -92,7 +92,9 @@ public class ModelXlsProcessor implements Model {
         controller.testController();
     }
 
+ /*
     public static void main(String[] args) {
+
         ModelXlsProcessor m = new ModelXlsProcessor();
         String filePath = "C:\\Users\\stoic\\OneDrive\\Desktop\\xlsFiles\\Book1.xlsx";
         HashMap<String, Object> data = m.parseFile(new File(filePath)); // Parse the file and store the data in the HashMap
@@ -114,7 +116,7 @@ public class ModelXlsProcessor implements Model {
             System.out.println();
         }
     }
-
+*/
 
     public static class AlphanumericComparator implements Comparator<String> {
         @Override

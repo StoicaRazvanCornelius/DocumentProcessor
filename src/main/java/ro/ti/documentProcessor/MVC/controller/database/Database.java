@@ -162,18 +162,6 @@ public class Database {
             throw new RuntimeException(e);
         }
     }
-    public static void main(String[] args) {
-        Database database = new Database();
-        if (database.checkIfClientExist("John Doe")){
-            String clientName = "John Doe";
-            String type = "xls";
-            String lastModified = "2023-05-25 10:30:00";
-            String name ="Test document";
-            database.makeNewDocumentEntry(clientName,type, name, lastModified );
-        }
-        System.out.println();
-    }
-
 
 }
 
