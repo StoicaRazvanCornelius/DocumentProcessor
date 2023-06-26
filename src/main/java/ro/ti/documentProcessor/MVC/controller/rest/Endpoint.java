@@ -1,18 +1,33 @@
 package ro.ti.documentProcessor.MVC.controller.rest;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Endpoint {
 
     private static final String BASE_URI = "http://localhost/connectDatabase.php";
 
+/*
     public static void main(String[] args) {
         Endpoint endpoint = new Endpoint();
         String filePath = "C:\\Users\\stoic\\OneDrive\\Desktop\\xlsFiles\\Book1.xlsx"; // Replace with the actual file path
@@ -22,10 +37,11 @@ public class Endpoint {
         String client = "ss";
         String clientId = "3";
         String lastModified = "2023-05-25 10:30:00";
-        endpoint.uploadFile(filePath, name, extension, lastModified,clientId,client);
-        //endpoint.downloadFile(null);
+        //endpoint.uploadFile(filePath, name, extension, lastModified,clientId,client);
+        endpoint.downloadFile("C:\\Users\\stoic\\OneDrive\\Desktop\\xlsFiles\\", "5", "tmp","xlsx");
     }
 
+ */
     public boolean uploadFile(String filePath, String name, String extension, String lastModified,String clientId, String clientName) {
         try {
             String encodedPath = URLEncoder.encode(".\\files", "UTF-8");
@@ -114,56 +130,36 @@ public class Endpoint {
         return true;
     }
 
-    public void downloadFile(String savePath) {
+    public void downloadFile(String savePath, String clientId, String fileName, String fileExtension) {
         String fileURL = "http://localhost/download.php";
-        savePath = "C:\\Users\\stoic\\OneDrive\\Desktop\\xlsFiles\\Test.txt";
+        savePath = savePath + fileName + "." +fileExtension;
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            HttpPost httpPost = new HttpPost(fileURL);
 
-        try {
-            URI uri = URI.create(BASE_URI);
-            HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
-            int responseCode = connection.getResponseCode();
+            // Prepare the parameters
+            List<NameValuePair> params = new ArrayList<>();
+            params.add(new BasicNameValuePair("client_id", clientId));
+            params.add(new BasicNameValuePair("file_name", fileName));
+            params.add(new BasicNameValuePair("file_extension", fileExtension));
+            httpPost.setEntity(new UrlEncodedFormEntity(params));
 
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                // Get the content type and file name from response headers
-                String contentType = connection.getContentType();
-                String fileName = "";
+            HttpResponse response = httpClient.execute(httpPost);
+            int statusCode = response.getStatusLine().getStatusCode();
 
-                String disposition = connection.getHeaderField("Content-Disposition");
-                if (disposition != null && disposition.contains("filename=")) {
-                    int index = disposition.indexOf("filename=");
-                    fileName = disposition.substring(index + 9).replace("\"", "");
-                } else {
-                    // Extract the file name from the URL if not found in headers
-                    fileName = fileURL.substring(fileURL.lastIndexOf("/") + 1);
+            if (statusCode == 200) {
+                HttpEntity entity = response.getEntity();
+
+                try (InputStream inputStream = entity.getContent()) {
+                    Files.copy(inputStream, Path.of(savePath), StandardCopyOption.REPLACE_EXISTING);
                 }
-
-                // Create the save directory if it doesn't exist
-                File directory = new File(savePath).getParentFile();
-                if (!directory.exists()) {
-                    directory.mkdirs();
-                }
-
-                // Save the file locally
-                InputStream inputStream = connection.getInputStream();
-                FileOutputStream outputStream = new FileOutputStream(savePath);
-                byte[] buffer = new byte[4096];
-                int bytesRead;
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    outputStream.write(buffer, 0, bytesRead);
-                }
-                outputStream.close();
-                inputStream.close();
 
                 System.out.println("File downloaded successfully.");
                 System.out.println("Saved file: " + savePath);
             } else {
-                System.out.println("Failed to download file. Response code: " + responseCode);
+                System.out.println("Failed to download file. Response code: " + statusCode);
             }
-
-            // Close the connection
-            connection.disconnect();
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
+

@@ -112,6 +112,7 @@ public class Database {
                 String file = resultSet.getString("name");
                 String client = resultSet.getString("clientName");
                 String type = resultSet.getString("typeName");
+                String clientId = resultSet.getString("clientId");
 
                 results.computeIfAbsent("fileName", key -> new ArrayList<>()).add(file);
                 results.computeIfAbsent("clientName", key -> new ArrayList<>()).add(client);

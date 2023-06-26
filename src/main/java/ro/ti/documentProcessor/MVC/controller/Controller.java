@@ -96,12 +96,22 @@ public class Controller implements ro.ti.documentProcessor.MVC.Interfaces.Contro
         int clientId =database.checkIfClientExist(clientName);
         if (clientId!=-1) {
             boolean uploadCheck =  endpoint.uploadFile(path, name, type, lastModified, String.valueOf(clientId), clientName);
-            //database.makeNewDocumentEntry(clientName,type,name,lastModified);
+            database.makeNewDocumentEntry(clientName,type,name,lastModified);
             return uploadCheck;
         }
         else return false;
 
         //database.makeNewDocumentEntry();
+    }
+
+    @Override
+    public int getClientIdGivenClientName(String name) {
+        return database.checkIfClientExist(name);
+    }
+
+    @Override
+    public void downloadFile(String clientId, String fileName, String fileExtension) {
+        endpoint.downloadFile("C:\\Users\\stoic\\OneDrive\\Desktop\\xlsFiles\\",clientId,fileName,fileExtension);
     }
 
     @Override

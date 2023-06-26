@@ -80,7 +80,8 @@ public class ExportPresenter {
                         downloadBtn.setGraphic(MaterialDesignIcon.FILE_DOWNLOAD.graphic());
                         downloadBtn.setOnAction((ActionEvent event)->{
                             Data data = getTableView().getItems().get(getIndex());
-                            System.out.println("downloading");
+                            String clientId = String.valueOf(DocumentProcessorGluonApplication.getController().getClientIdGivenClientName(data.getClientName()));
+                            DocumentProcessorGluonApplication.getController().downloadFile(clientId, data.getName(), data.getExtension());
                         });
 
                         btns.getChildren().addAll(downloadBtn);
