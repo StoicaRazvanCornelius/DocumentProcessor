@@ -1,5 +1,7 @@
 package ro.ti.documentProcessor.MVC.controller.database;
 
+import ro.ti.documentProcessor.app.Data;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -122,24 +124,20 @@ public class Database {
 
     }
 
-    public boolean checkIfClientExist(String clientName){
+    public int checkIfClientExist(String clientName){
+        int clientId= -1;
         try {
             query = "SELECT * FROM client WHERE clientName = \"" + clientName +"\"";
             resultSet = statement.executeQuery(query);
 
             if (resultSet.next()) {
-                resultSet.close();
-                statement.close();
-                return true;
-            } else {
-                // The result set is empty
-                resultSet.close();
-                statement.close();
-                return false;
+                clientId = resultSet.getInt("id");
+                return clientId;
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
+        return clientId;
     };
     public boolean makeNewDocumentEntry(String clientName, String type, String name, String lastModified) {
         try {
@@ -161,6 +159,15 @@ public class Database {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void main(String[] args) {
+        Database database = new Database();
+        database.url = "jdbc:mysql://localhost:3306/documentprocessorapp";
+        database.username = "root";
+        database.password = "1234";
+        System.out.println(database.checkIfClientExist("ss"));
+
     }
 
 }

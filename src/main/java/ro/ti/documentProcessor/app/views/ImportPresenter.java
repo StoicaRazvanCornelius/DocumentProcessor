@@ -150,10 +150,13 @@ public class ImportPresenter {
                             //process save
                             Data data = getTableView().getItems().get(getIndex());
                             // erase it from current list
-                            tvObservableList.remove(getTableView().getItems().get(getIndex()));
-                            if (dataPreviewBox.getChildren().size()>2) dataPreviewBox.getChildren().remove(1);
-                            //System.out.println(DocumentProcessorGluonApplication.getController().insertNewFile(data.getName(),data.getExtension(), String.valueOf(data.getLastModified()),data.getClientName()));
+                            if (DocumentProcessorGluonApplication.getController().insertNewFile(data.getPath(),data.getName(), data.getExtension(),String.valueOf(data.getLastModified()),data.getClientName())){
+                                tvObservableList.remove(getTableView().getItems().get(getIndex()));
+                                if (dataPreviewBox.getChildren().size()>=2) {
+                                    dataPreviewBox.getChildren().remove(1);
+                                }
 
+                            }
                         });
                         //erase btn
                         Button deleteBtn = new Button();
@@ -161,7 +164,9 @@ public class ImportPresenter {
                         deleteBtn.setOnAction((ActionEvent event)->{
                             tabs = null;
                             tvObservableList.remove(getTableView().getItems().get(getIndex()));
-                            dataPreviewBox.getChildren().remove(1);
+                            if (dataPreviewBox.getChildren().size()>=2) {
+                                dataPreviewBox.getChildren().remove(1);
+                            }
                         });
                         btns.getChildren().addAll(editBtn,saveBtn,deleteBtn);
 
@@ -286,6 +291,9 @@ public class ImportPresenter {
             scrollablePage.setMaxWidth(Region.USE_COMPUTED_SIZE);
             scrollablePage.setContent(tablePreview);
             tabs.getTabs().add(new Tab(page, scrollablePage));
+        }
+        if (dataPreviewBox.getChildren().size()>=2) {
+            dataPreviewBox.getChildren().remove(1);
         }
         dataPreviewBox.getChildren().add(tabs);
 

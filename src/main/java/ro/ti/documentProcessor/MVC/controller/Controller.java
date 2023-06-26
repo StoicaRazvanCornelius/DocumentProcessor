@@ -93,12 +93,15 @@ public class Controller implements ro.ti.documentProcessor.MVC.Interfaces.Contro
 
     @Override
     public boolean insertNewFile(String path,String name, String type, String lastModified, String clientName) {
-        path = "C:\\Users\\stoic\\OneDrive\\Desktop\\xlsFiles\\Book1.xlsx"; // Replace with the actual file path
-        name = "Book1";
-        type = "xlsx";
-        clientName = "John_Doe"; // Replace space with %20
+        int clientId =database.checkIfClientExist(clientName);
+        if (clientId!=-1) {
+            boolean uploadCheck =  endpoint.uploadFile(path, name, type, lastModified, String.valueOf(clientId), clientName);
+            //database.makeNewDocumentEntry(clientName,type,name,lastModified);
+            return uploadCheck;
+        }
+        else return false;
 
-        return endpoint.uploadFile(path,name,type,lastModified,clientName,lastModified);
+        //database.makeNewDocumentEntry();
     }
 
     @Override

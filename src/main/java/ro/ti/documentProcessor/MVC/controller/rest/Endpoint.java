@@ -19,15 +19,16 @@ public class Endpoint {
         String name = "Book1";
         String extension = "xlsx";
         String path = ".\\files";
-        String client = "John%20Doe"; // Replace space with %20
+        String client = "ss";
+        String clientId = "3";
         String lastModified = "2023-05-25 10:30:00";
-        endpoint.uploadFile(filePath, name, extension, path, client,lastModified);
+        endpoint.uploadFile(filePath, name, extension, lastModified,clientId,client);
         //endpoint.downloadFile(null);
     }
 
-    public boolean uploadFile(String filePath, String name, String extension, String path, String client, String lastModified) {
+    public boolean uploadFile(String filePath, String name, String extension, String lastModified,String clientId, String clientName) {
         try {
-            String encodedPath = URLEncoder.encode(path, "UTF-8");
+            String encodedPath = URLEncoder.encode(".\\files", "UTF-8");
             String encodedUrl = "http://localhost/upload.php";
             URL url = new URL(encodedUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -57,7 +58,12 @@ public class Endpoint {
             // Write the client parameter
             writer.append("--").append(boundary).append("\r\n");
             writer.append("Content-Disposition: form-data; name=\"client\"\r\n\r\n");
-            writer.append(client).append("\r\n");
+            writer.append(clientName).append("\r\n");
+
+            // Write the clientId parameter
+            writer.append("--").append(boundary).append("\r\n");
+            writer.append("Content-Disposition: form-data; name=\"clientId\"\r\n\r\n");
+            writer.append(clientId).append("\r\n");
 
             // Write the lastModified parameter
             writer.append("--").append(boundary).append("\r\n");
@@ -84,7 +90,7 @@ public class Endpoint {
             writer.append("\r\n").append("--").append(boundary).append("--").append("\r\n");
             writer.close();
 
-            /*
+
             // Get the response from the server
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -99,10 +105,10 @@ public class Endpoint {
             } else {
                 System.out.println("Failed to upload file. Response code: " + responseCode);
             }
-             */
+
             connection.disconnect();
         } catch (IOException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             return false;
         }
         return true;
