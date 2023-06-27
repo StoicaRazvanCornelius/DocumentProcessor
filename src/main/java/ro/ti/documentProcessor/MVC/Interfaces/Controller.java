@@ -24,4 +24,6 @@ public interface Controller {
     void reloadFile(String path, Timestamp dateTimeUpdated);
     void pingDatabase();
 
+    public void storeConfiguration();
+
 }

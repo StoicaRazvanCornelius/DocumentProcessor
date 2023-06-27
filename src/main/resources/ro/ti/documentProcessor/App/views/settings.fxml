@@ -75,26 +75,25 @@
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <DropdownButton>
+                                    <DropdownButton fx:id="selectSwatchMenu">
                                        <items>
-                                          <MenuItem text="Amber" />
-                                          <MenuItem text="BlueGray" />
-                                          <MenuItem text="Brown" />
-                                          <MenuItem text="Cyon" />
-                                          <MenuItem text="Choice 2" />
-                                          <MenuItem text="Choice 3" />
-                                          <MenuItem text="Choice 1" />
-                                          <MenuItem text="Choice 2" />
-                                          <MenuItem text="Choice 3" />
-                                          <MenuItem text="Choice 1" />
-                                          <MenuItem text="Choice 2" />
-                                          <MenuItem text="Choice 3" />
-                                          <MenuItem text="Choice 1" />
-                                          <MenuItem text="Choice 2" />
-                                          <MenuItem text="Choice 3" />
-                                          <MenuItem text="Choice 1" />
-                                          <MenuItem text="Choice 2" />
-                                          <MenuItem text="Choice 3" />
+                                          <MenuItem onAction="#changeSwatch" text="AMBER" />
+                                          <MenuItem onAction="#changeSwatch" text="BLUEGRAY" />
+                                          <MenuItem onAction="#changeSwatch" text="CYAN" />
+                                          <MenuItem onAction="#changeSwatch" text="DEEP_ORANGE" />
+                                          <MenuItem onAction="#changeSwatch" text="DEEP_PURPLE" />
+                                          <MenuItem onAction="#changeSwatch" text="GREEN" />
+                                          <MenuItem onAction="#changeSwatch" text="GREY" />
+                                          <MenuItem onAction="#changeSwatch" text="INDIGO" />
+                                          <MenuItem onAction="#changeSwatch" text="LIGHT_BLUE" />
+                                          <MenuItem onAction="#changeSwatch" text="LIGHT_GREEN" />
+                                          <MenuItem onAction="#changeSwatch" text="LIME" />
+                                          <MenuItem onAction="#changeSwatch" text="ORANGE" />
+                                          <MenuItem onAction="#changeSwatch" text="PINK" />
+                                          <MenuItem onAction="#changeSwatch" text="PURPLE" />
+                                          <MenuItem onAction="#changeSwatch" text="RED" />
+                                          <MenuItem onAction="#changeSwatch" text="TEAL" />
+                                          <MenuItem onAction="#changeSwatch" text="YELLOW" />
                                        </items>
                                        <HBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -104,16 +103,15 @@
                               </HBox>
                               <HBox>
                                  <children>
-                                    <Label text="Screen resolution:">
+                                    <Label text="Theme">
                                        <HBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <DropdownButton>
+                                    <DropdownButton fx:id="selectThemeMenu">
                                        <items>
-                                          <MenuItem text="Choice 1" />
-                                          <MenuItem text="Choice 2" />
-                                          <MenuItem text="Choice 3" />
+                                          <MenuItem onAction="#changeTheme" text="LIGHT" />
+                                          <MenuItem onAction="#changeTheme" text="DARK" />
                                        </items>
                                        <HBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

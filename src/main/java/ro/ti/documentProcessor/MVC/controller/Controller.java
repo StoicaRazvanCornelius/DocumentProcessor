@@ -1,8 +1,6 @@
 package ro.ti.documentProcessor.MVC.controller;
 
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import ro.ti.documentProcessor.DocumentProcessorGluonApplication;
 import ro.ti.documentProcessor.MVC.Interfaces.ControllerFile;
 import ro.ti.documentProcessor.MVC.Interfaces.Model;
 import ro.ti.documentProcessor.MVC.Interfaces.View;
@@ -14,9 +12,8 @@ import ro.ti.documentProcessor.MVC.controller.rest.Endpoint;
 import ro.ti.documentProcessor.MVC.controller.utils.FileChecker;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -122,6 +119,19 @@ public class Controller implements ro.ti.documentProcessor.MVC.Interfaces.Contro
     @Override
     public void pingDatabase() {
         database.checkifConnectionIsValid();
+    }
+
+    @Override
+    public void storeConfiguration() {
+        //System.out.println(DocumentProcessorGluonApplication.class.getResource("config.properties").getPath());
+        File outFile = new File(DocumentProcessorGluonApplication.class.getResource("config.properties").getPath());
+        try (OutputStream os = new FileOutputStream(outFile)) {
+            properties.store(os, "sddd");
+        } catch (IOException e) {
+
+        }
+
+
     }
 
     private ControllerFile getFileController(String extension) {

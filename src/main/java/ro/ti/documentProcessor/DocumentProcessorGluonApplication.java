@@ -39,7 +39,10 @@ public class DocumentProcessorGluonApplication extends Application implements ro
     public static void setImportPresenter(ImportPresenter importPresenterInstance){
         importPresenter=importPresenterInstance;
     }
-
+    public static void settingsPresenter(SettingsPresenter settingsPresenterInstance){
+        settingsPresenter = settingsPresenterInstance;
+        settingsPresenter.setAppProperties(properties);
+    }
 
 
     private AppManager appManager;

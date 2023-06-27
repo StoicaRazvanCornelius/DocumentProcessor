@@ -11,6 +11,7 @@ import com.gluonhq.charm.glisten.control.NavigationDrawer.Item;
 import com.gluonhq.charm.glisten.control.NavigationDrawer.ViewItem;
 import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
 import javafx.scene.image.Image;
+import ro.ti.documentProcessor.DocumentProcessorGluonApplication;
 
 import static ro.ti.documentProcessor.DocumentProcessorGluonApplication.*;
 
@@ -35,6 +36,7 @@ public class DrawerManager {
             final Item quitItem = new Item("Quit", MaterialDesignIcon.EXIT_TO_APP.graphic());
              quitItem.selectedProperty().addListener((obs, ov, nv) -> {
                 if (nv) {
+                    DocumentProcessorGluonApplication.getController().storeConfiguration();
                     System.exit(0);
                     Services.get(LifecycleService.class).ifPresent(LifecycleService::shutdown);
                 }
